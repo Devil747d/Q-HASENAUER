@@ -373,24 +373,45 @@
         <div id="quadrant-q1"
           class="quadrant-container flex flex-col rounded-2xl bg-surface-900/80 border-2 border-red-500/40 p-4 sm:p-5 transition-all shadow-lg hover:shadow-red-500/5">
           <!-- Quadrant Header -->
-          <div class="flex items-start justify-between pb-3.5 border-b border-red-500/20 mb-3.5">
-            <div class="flex items-center gap-3">
-              <span
-                class="w-9 h-9 rounded-xl bg-red-500/20 text-red-400 border border-red-500/40 flex items-center justify-center font-extrabold font-display text-sm shrink-0">
-                Q1
-              </span>
-              <div>
-                <h3 class="text-base sm:text-lg font-bold text-white font-display flex flex-wrap items-center gap-2">
-                  Crisi (Fare Subito)
-                  <span
-                    class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-red-500/20 text-red-300 border border-red-500/30">Urgente
-                    & Importante</span>
-                </h3>
-                <p class="text-xs sm:text-sm text-slate-400 mt-0.5">Scadenze imminenti, emergenze, problemi critici</p>
+          <div class="pb-3.5 border-b border-red-500/20 mb-3.5">
+            <div class="flex items-start justify-between gap-2">
+              <div class="flex items-start gap-3">
+                <span
+                  class="w-9 h-9 rounded-xl bg-red-500/20 text-red-400 border border-red-500/40 flex items-center justify-center font-extrabold font-display text-sm shrink-0 mt-0.5">
+                  Q1
+                </span>
+                <div>
+                  <h3 class="text-base sm:text-lg font-bold text-white font-display flex flex-wrap items-center gap-2">
+                    Importante e Urgente (Fare subito - Le Crisi)
+                    <span
+                      class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-red-500/20 text-red-300 border border-red-500/30">
+                      Urgente & Importante
+                    </span>
+                  </h3>
+                  <!-- Toggle Link ad Espansione -->
+                  <button type="button" onclick="toggleQuadrantGuide('q1')"
+                    class="inline-flex items-center gap-1.5 text-xs text-red-300 hover:text-white mt-1.5 py-0.5 px-2 rounded-lg bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 transition-all cursor-pointer">
+                    <i data-lucide="info" class="w-3.5 h-3.5 text-red-400"></i>
+                    <span>Cosa contiene & Azione</span>
+                    <i data-lucide="chevron-down" id="guide-chevron-q1" class="w-3.5 h-3.5 transition-transform duration-200"></i>
+                  </button>
+                </div>
+              </div>
+              <span id="badge-count-q1"
+                class="text-sm font-bold px-2.5 py-1 rounded-full bg-red-950 text-red-300 border border-red-800 shrink-0">0</span>
+            </div>
+
+            <!-- Contenuto Espandibile Guida Q1 -->
+            <div id="guide-box-q1" class="hidden mt-3 p-3 rounded-xl bg-red-950/40 border border-red-500/30 text-xs text-slate-200 space-y-2">
+              <div class="flex items-start gap-2">
+                <span class="text-red-400 font-semibold shrink-0">📦 Cosa contiene:</span>
+                <span class="text-slate-300">Scadenze imminenti, problemi critici, emergenze o imprevisti non rimandabili.</span>
+              </div>
+              <div class="flex items-start gap-2 pt-1.5 border-t border-red-500/20">
+                <span class="text-red-400 font-semibold shrink-0">⚡ Azione:</span>
+                <span class="text-slate-300"><strong>Fai ora.</strong> Richiedono attenzione immediata e non possono essere delegate. Vanno gestite ma ridotte pianificando meglio in anticipo.</span>
               </div>
             </div>
-            <span id="badge-count-q1"
-              class="text-sm font-bold px-2.5 py-1 rounded-full bg-red-950 text-red-300 border border-red-800 shrink-0">0</span>
           </div>
 
           <!-- Task Dropzone / List -->
@@ -405,25 +426,45 @@
         <div id="quadrant-q2"
           class="quadrant-container flex flex-col rounded-2xl bg-surface-900/80 border-2 border-blue-500/40 p-4 sm:p-5 transition-all shadow-lg hover:shadow-blue-500/5">
           <!-- Quadrant Header -->
-          <div class="flex items-start justify-between pb-3.5 border-b border-blue-500/20 mb-3.5">
-            <div class="flex items-center gap-3">
-              <span
-                class="w-9 h-9 rounded-xl bg-blue-500/20 text-blue-400 border border-blue-500/40 flex items-center justify-center font-extrabold font-display text-sm shrink-0">
-                Q2
-              </span>
-              <div>
-                <h3 class="text-base sm:text-lg font-bold text-white font-display flex flex-wrap items-center gap-2">
-                  Qualità (Pianificare)
-                  <span
-                    class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/30">Importante,
-                    Non Urgente</span>
-                </h3>
-                <p class="text-xs sm:text-sm text-slate-400 mt-0.5">Crescita, strategia, prevenzione, progetti a lungo
-                  termine</p>
+          <div class="pb-3.5 border-b border-blue-500/20 mb-3.5">
+            <div class="flex items-start justify-between gap-2">
+              <div class="flex items-start gap-3">
+                <span
+                  class="w-9 h-9 rounded-xl bg-blue-500/20 text-blue-400 border border-blue-500/40 flex items-center justify-center font-extrabold font-display text-sm shrink-0 mt-0.5">
+                  Q2
+                </span>
+                <div>
+                  <h3 class="text-base sm:text-lg font-bold text-white font-display flex flex-wrap items-center gap-2">
+                    Importante ma Non Urgente (Pianificare - La Strategia)
+                    <span
+                      class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/30">
+                      Importante, Non Urgente
+                    </span>
+                  </h3>
+                  <!-- Toggle Link ad Espansione -->
+                  <button type="button" onclick="toggleQuadrantGuide('q2')"
+                    class="inline-flex items-center gap-1.5 text-xs text-blue-300 hover:text-white mt-1.5 py-0.5 px-2 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 transition-all cursor-pointer">
+                    <i data-lucide="info" class="w-3.5 h-3.5 text-blue-400"></i>
+                    <span>Cosa contiene & Azione</span>
+                    <i data-lucide="chevron-down" id="guide-chevron-q2" class="w-3.5 h-3.5 transition-transform duration-200"></i>
+                  </button>
+                </div>
+              </div>
+              <span id="badge-count-q2"
+                class="text-sm font-bold px-2.5 py-1 rounded-full bg-blue-950 text-blue-300 border border-blue-800 shrink-0">0</span>
+            </div>
+
+            <!-- Contenuto Espandibile Guida Q2 -->
+            <div id="guide-box-q2" class="hidden mt-3 p-3 rounded-xl bg-blue-950/40 border border-blue-500/30 text-xs text-slate-200 space-y-2">
+              <div class="flex items-start gap-2">
+                <span class="text-blue-400 font-semibold shrink-0">📦 Cosa contiene:</span>
+                <span class="text-slate-300">Attività di crescita personale o professionale, pianificazione a lungo termine, prevenzione, cura della salute e relazioni.</span>
+              </div>
+              <div class="flex items-start gap-2 pt-1.5 border-t border-blue-500/20">
+                <span class="text-blue-400 font-semibold shrink-0">⚡ Azione:</span>
+                <span class="text-slate-300"><strong>Pianifica.</strong> È il quadrante su cui bisognerebbe investire più tempo ed energie, poiché previene l'insorgere di nuove crisi.</span>
               </div>
             </div>
-            <span id="badge-count-q2"
-              class="text-sm font-bold px-2.5 py-1 rounded-full bg-blue-950 text-blue-300 border border-blue-800 shrink-0">0</span>
           </div>
 
           <!-- Task Dropzone / List -->
@@ -438,25 +479,45 @@
         <div id="quadrant-q3"
           class="quadrant-container flex flex-col rounded-2xl bg-surface-900/80 border-2 border-amber-500/40 p-4 sm:p-5 transition-all shadow-lg hover:shadow-amber-500/5">
           <!-- Quadrant Header -->
-          <div class="flex items-start justify-between pb-3.5 border-b border-amber-500/20 mb-3.5">
-            <div class="flex items-center gap-3">
-              <span
-                class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center font-extrabold font-display text-sm shrink-0">
-                Q3
-              </span>
-              <div>
-                <h3 class="text-base sm:text-lg font-bold text-white font-display flex flex-wrap items-center gap-2">
-                  Inganno (Delegare)
-                  <span
-                    class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">Urgente,
-                    Non Importante</span>
-                </h3>
-                <p class="text-xs sm:text-sm text-slate-400 mt-0.5">Interruzioni, riunioni superflue, richieste di terzi
-                </p>
+          <div class="pb-3.5 border-b border-amber-500/20 mb-3.5">
+            <div class="flex items-start justify-between gap-2">
+              <div class="flex items-start gap-3">
+                <span
+                  class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center font-extrabold font-display text-sm shrink-0 mt-0.5">
+                  Q3
+                </span>
+                <div>
+                  <h3 class="text-base sm:text-lg font-bold text-white font-display flex flex-wrap items-center gap-2">
+                    Urgente ma Non Importante (Delegare - L'Inganno)
+                    <span
+                      class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                      Urgente, Non Importante
+                    </span>
+                  </h3>
+                  <!-- Toggle Link ad Espansione -->
+                  <button type="button" onclick="toggleQuadrantGuide('q3')"
+                    class="inline-flex items-center gap-1.5 text-xs text-amber-300 hover:text-white mt-1.5 py-0.5 px-2 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/20 transition-all cursor-pointer">
+                    <i data-lucide="info" class="w-3.5 h-3.5 text-amber-400"></i>
+                    <span>Cosa contiene & Azione</span>
+                    <i data-lucide="chevron-down" id="guide-chevron-q3" class="w-3.5 h-3.5 transition-transform duration-200"></i>
+                  </button>
+                </div>
+              </div>
+              <span id="badge-count-q3"
+                class="text-sm font-bold px-2.5 py-1 rounded-full bg-amber-950 text-amber-300 border border-amber-800 shrink-0">0</span>
+            </div>
+
+            <!-- Contenuto Espandibile Guida Q3 -->
+            <div id="guide-box-q3" class="hidden mt-3 p-3 rounded-xl bg-amber-950/40 border border-amber-500/30 text-xs text-slate-200 space-y-2">
+              <div class="flex items-start gap-2">
+                <span class="text-amber-400 font-semibold shrink-0">📦 Cosa contiene:</span>
+                <span class="text-slate-300">Interruzioni frequenti, molte email o chiamate, richieste altrui che non servono ai tuoi obiettivi primari.</span>
+              </div>
+              <div class="flex items-start gap-2 pt-1.5 border-t border-amber-500/20">
+                <span class="text-amber-400 font-semibold shrink-0">⚡ Azione:</span>
+                <span class="text-slate-300"><strong>Delega.</strong> Se possibile, affida questi compiti ad altre persone per liberare tempo prezioso.</span>
               </div>
             </div>
-            <span id="badge-count-q3"
-              class="text-sm font-bold px-2.5 py-1 rounded-full bg-amber-950 text-amber-300 border border-amber-800 shrink-0">0</span>
           </div>
 
           <!-- Task Dropzone / List -->
@@ -471,25 +532,45 @@
         <div id="quadrant-q4"
           class="quadrant-container flex flex-col rounded-2xl bg-surface-900/80 border-2 border-slate-600/50 p-4 sm:p-5 transition-all shadow-lg hover:shadow-slate-500/5">
           <!-- Quadrant Header -->
-          <div class="flex items-start justify-between pb-3.5 border-b border-slate-700 mb-3.5">
-            <div class="flex items-center gap-3">
-              <span
-                class="w-9 h-9 rounded-xl bg-slate-700/50 text-slate-300 border border-slate-600 flex items-center justify-center font-extrabold font-display text-sm shrink-0">
-                Q4
-              </span>
-              <div>
-                <h3 class="text-base sm:text-lg font-bold text-white font-display flex flex-wrap items-center gap-2">
-                  Spreco (Eliminare)
-                  <span
-                    class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Né
-                    Urgente né Importante</span>
-                </h3>
-                <p class="text-xs sm:text-sm text-slate-400 mt-0.5">Distrazioni, perdite di tempo, abitudini
-                  improduttive</p>
+          <div class="pb-3.5 border-b border-slate-700 mb-3.5">
+            <div class="flex items-start justify-between gap-2">
+              <div class="flex items-start gap-3">
+                <span
+                  class="w-9 h-9 rounded-xl bg-slate-700/50 text-slate-300 border border-slate-600 flex items-center justify-center font-extrabold font-display text-sm shrink-0 mt-0.5">
+                  Q4
+                </span>
+                <div>
+                  <h3 class="text-base sm:text-lg font-bold text-white font-display flex flex-wrap items-center gap-2">
+                    Non Importante e Non Urgente (Eliminare - Lo Spreco)
+                    <span
+                      class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
+                      Né Urgente né Importante
+                    </span>
+                  </h3>
+                  <!-- Toggle Link ad Espansione -->
+                  <button type="button" onclick="toggleQuadrantGuide('q4')"
+                    class="inline-flex items-center gap-1.5 text-xs text-slate-300 hover:text-white mt-1.5 py-0.5 px-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-600 transition-all cursor-pointer">
+                    <i data-lucide="info" class="w-3.5 h-3.5 text-slate-400"></i>
+                    <span>Cosa contiene & Azione</span>
+                    <i data-lucide="chevron-down" id="guide-chevron-q4" class="w-3.5 h-3.5 transition-transform duration-200"></i>
+                  </button>
+                </div>
+              </div>
+              <span id="badge-count-q4"
+                class="text-sm font-bold px-2.5 py-1 rounded-full bg-slate-800 text-slate-400 border border-slate-700 shrink-0">0</span>
+            </div>
+
+            <!-- Contenuto Espandibile Guida Q4 -->
+            <div id="guide-box-q4" class="hidden mt-3 p-3 rounded-xl bg-slate-900 border border-slate-700 text-xs text-slate-200 space-y-2">
+              <div class="flex items-start gap-2">
+                <span class="text-slate-400 font-semibold shrink-0">📦 Cosa contiene:</span>
+                <span class="text-slate-300">Distrazioni superflue, perdita di tempo sui social media, passatempi eccessivi o attività del tutto futili.</span>
+              </div>
+              <div class="flex items-start gap-2 pt-1.5 border-t border-slate-800">
+                <span class="text-slate-400 font-semibold shrink-0">⚡ Azione:</span>
+                <span class="text-slate-300"><strong>Elimina.</strong> Queste attività non portano alcun valore e andrebbero ridotte o rimosse del tutto dalla tua routine.</span>
               </div>
             </div>
-            <span id="badge-count-q4"
-              class="text-sm font-bold px-2.5 py-1 rounded-full bg-slate-800 text-slate-400 border border-slate-700 shrink-0">0</span>
           </div>
 
           <!-- Task Dropzone / List -->
@@ -1240,6 +1321,23 @@
       const div = document.createElement('div');
       div.textContent = str;
       return div.innerHTML;
+    }
+
+    // --- TOGGLE GUIDA ESPANDIBILE QUADRANTI ---
+    function toggleQuadrantGuide(q) {
+      const box = document.getElementById(`guide-box-${q}`);
+      const chevron = document.getElementById(`guide-chevron-${q}`);
+      if (!box) return;
+
+      const isHidden = box.classList.contains('hidden');
+      if (isHidden) {
+        box.classList.remove('hidden');
+        if (chevron) chevron.classList.add('rotate-180');
+      } else {
+        box.classList.add('hidden');
+        if (chevron) chevron.classList.remove('rotate-180');
+      }
+      lucide.createIcons();
     }
 
     // --- PWA SERVICE WORKER & INSTALL PROMPT ---
