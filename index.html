@@ -1,21 +1,24 @@
 <!DOCTYPE html>
 <html lang="it" class="dark">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Matrice di Eisenhower | Gestione Priorità & Produttività</title>
-  
+
   <!-- Font Google Outfit & Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  
+
   <!-- Supabase JS v2 CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  
+
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
@@ -72,13 +75,16 @@
       width: 6px;
       height: 6px;
     }
+
     ::-webkit-scrollbar-track {
       background: #0f172a;
     }
+
     ::-webkit-scrollbar-thumb {
       background: #334155;
       border-radius: 9999px;
     }
+
     ::-webkit-scrollbar-thumb:hover {
       background: #475569;
     }
@@ -88,6 +94,7 @@
       opacity: 0.35;
       transform: scale(0.97);
     }
+
     .quadrant-dropzone.drag-over {
       background-color: rgba(255, 255, 255, 0.06) !important;
       border-color: #60a5fa !important;
@@ -95,7 +102,9 @@
     }
   </style>
 </head>
-<body class="bg-surface-950 text-slate-100 font-sans min-h-screen flex flex-col selection:bg-blue-600 selection:text-white antialiased">
+
+<body
+  class="bg-surface-950 text-slate-100 font-sans min-h-screen flex flex-col selection:bg-blue-600 selection:text-white antialiased">
 
   <!-- TOAST NOTIFICATION CONTAINER -->
   <div id="toast-container" class="fixed top-4 right-4 z-50 flex flex-col gap-2 max-w-sm pointer-events-none"></div>
@@ -103,10 +112,12 @@
   <!-- ========================================== -->
   <!-- 1. SCHERMATA CONFIGURAZIONE SUPABASE MODAL -->
   <!-- ========================================== -->
-  <div id="setup-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 hidden">
-    <div class="bg-surface-900 border border-slate-700/80 rounded-2xl w-full max-w-lg p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+  <div id="setup-modal"
+    class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 hidden">
+    <div
+      class="bg-surface-900 border border-slate-700/80 rounded-2xl w-full max-w-lg p-6 sm:p-8 shadow-2xl relative overflow-hidden">
       <div class="absolute -top-24 -right-24 w-48 h-48 bg-blue-500/20 rounded-full blur-3xl pointer-events-none"></div>
-      
+
       <div class="flex items-center gap-3 mb-6">
         <div class="p-3 bg-blue-600/20 text-blue-400 rounded-xl border border-blue-500/30">
           <i data-lucide="database" class="w-6 h-6"></i>
@@ -117,48 +128,37 @@
         </div>
       </div>
 
-      <div class="bg-slate-800/60 border border-slate-700 rounded-xl p-3.5 mb-5 text-xs text-slate-300 flex items-start gap-2.5">
+      <div
+        class="bg-slate-800/60 border border-slate-700 rounded-xl p-3.5 mb-5 text-xs text-slate-300 flex items-start gap-2.5">
         <i data-lucide="info" class="w-4 h-4 text-blue-400 mt-0.5 shrink-0"></i>
-        <span>Trovi questi dati nella dashboard di Supabase in: <strong>Project Settings &rarr; API</strong> (Project URL e Project API anon key). Vengono salvati in locale nel tuo browser.</span>
+        <span>Trovi questi dati nella dashboard di Supabase in: <strong>Project Settings &rarr; API</strong> (Project
+          URL e Project API anon key). Vengono salvati in locale nel tuo browser.</span>
       </div>
 
       <form id="setup-form" class="space-y-4" onsubmit="saveSupabaseConfig(event)">
         <div>
-          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Project URL o Project ID</label>
-          <input 
-            type="text" 
-            id="cfg-url" 
-            required 
-            placeholder="es. xyzabc... oppure https://xyzabc.supabase.co" 
-            class="w-full px-4 py-2.5 bg-surface-950 border border-slate-700 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
-          />
-          <p class="text-[11px] text-slate-400 mt-1">Puoi incollare sia l'URL completo sia solo la stringa di lettere del tuo Project ID.</p>
+          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Project URL o
+            Project ID</label>
+          <input type="text" id="cfg-url" required placeholder="es. xyzabc... oppure https://xyzabc.supabase.co"
+            class="w-full px-4 py-2.5 bg-surface-950 border border-slate-700 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all" />
+          <p class="text-[11px] text-slate-400 mt-1">Puoi incollare sia l'URL completo sia solo la stringa di lettere
+            del tuo Project ID.</p>
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Anon Public Key</label>
-          <input 
-            type="text" 
-            id="cfg-key" 
-            required 
-            placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." 
-            class="w-full px-4 py-2.5 bg-surface-950 border border-slate-700 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 font-mono text-xs transition-all"
-          />
+          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Anon Public
+            Key</label>
+          <input type="text" id="cfg-key" required placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+            class="w-full px-4 py-2.5 bg-surface-950 border border-slate-700 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 font-mono text-xs transition-all" />
         </div>
 
         <div class="flex items-center justify-end gap-3 pt-3">
-          <button 
-            type="button" 
-            id="btn-close-setup" 
-            onclick="closeSetupModal()" 
-            class="hidden px-4 py-2 text-sm text-slate-400 hover:text-white transition-colors"
-          >
+          <button type="button" id="btn-close-setup" onclick="closeSetupModal()"
+            class="hidden px-4 py-2 text-sm text-slate-400 hover:text-white transition-colors">
             Annulla
           </button>
-          <button 
-            type="submit" 
-            class="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium text-sm rounded-xl shadow-lg shadow-blue-600/30 transition-all flex items-center gap-2"
-          >
+          <button type="submit"
+            class="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-medium text-sm rounded-xl shadow-lg shadow-blue-600/30 transition-all flex items-center gap-2">
             <i data-lucide="save" class="w-4 h-4"></i>
             Salva e Connetti
           </button>
@@ -170,16 +170,19 @@
   <!-- ========================================== -->
   <!-- 2. SCHERMATA AUTENTICAZIONE (LOGIN / SIGNUP) -->
   <!-- ========================================== -->
-  <div id="auth-section" class="flex-1 flex items-center justify-center p-4 min-h-screen relative overflow-hidden hidden">
+  <div id="auth-section"
+    class="flex-1 flex items-center justify-center p-4 min-h-screen relative overflow-hidden hidden">
     <!-- Background lights -->
     <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
     <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-red-600/10 rounded-full blur-3xl pointer-events-none"></div>
 
-    <div class="w-full max-w-md bg-surface-900/90 backdrop-blur-xl border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl relative z-10">
-      
+    <div
+      class="w-full max-w-md bg-surface-900/90 backdrop-blur-xl border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl relative z-10">
+
       <!-- Logo e Brand -->
       <div class="text-center mb-8">
-        <div class="inline-flex p-3.5 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-2xl shadow-lg shadow-blue-500/25 mb-4">
+        <div
+          class="inline-flex p-3.5 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-2xl shadow-lg shadow-blue-500/25 mb-4">
           <i data-lucide="layout-grid" class="w-8 h-8 text-white"></i>
         </div>
         <h1 class="text-2xl font-bold font-display text-white tracking-tight">Matrice di Eisenhower</h1>
@@ -188,18 +191,12 @@
 
       <!-- Auth Tabs: Accedi / Registrati -->
       <div class="flex p-1 bg-surface-950 rounded-xl mb-6 border border-slate-800">
-        <button 
-          id="tab-login" 
-          onclick="setAuthTab('login')" 
-          class="flex-1 py-2 text-xs font-semibold rounded-lg transition-all text-white bg-surface-800 shadow-sm"
-        >
+        <button id="tab-login" onclick="setAuthTab('login')"
+          class="flex-1 py-2 text-xs font-semibold rounded-lg transition-all text-white bg-surface-800 shadow-sm">
           Accedi
         </button>
-        <button 
-          id="tab-signup" 
-          onclick="setAuthTab('signup')" 
-          class="flex-1 py-2 text-xs font-semibold rounded-lg transition-all text-slate-400 hover:text-white"
-        >
+        <button id="tab-signup" onclick="setAuthTab('signup')"
+          class="flex-1 py-2 text-xs font-semibold rounded-lg transition-all text-slate-400 hover:text-white">
           Crea Account
         </button>
       </div>
@@ -210,13 +207,8 @@
           <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Email</label>
           <div class="relative">
             <i data-lucide="mail" class="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
-            <input 
-              type="email" 
-              id="auth-email" 
-              required 
-              placeholder="tuonome@esempio.com" 
-              class="w-full pl-10 pr-4 py-2.5 bg-surface-950 border border-slate-700/80 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
-            />
+            <input type="email" id="auth-email" required placeholder="tuonome@esempio.com"
+              class="w-full pl-10 pr-4 py-2.5 bg-surface-950 border border-slate-700/80 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all" />
           </div>
         </div>
 
@@ -224,22 +216,13 @@
           <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Password</label>
           <div class="relative">
             <i data-lucide="lock" class="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
-            <input 
-              type="password" 
-              id="auth-password" 
-              required 
-              minlength="6" 
-              placeholder="Minimo 6 caratteri" 
-              class="w-full pl-10 pr-4 py-2.5 bg-surface-950 border border-slate-700/80 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
-            />
+            <input type="password" id="auth-password" required minlength="6" placeholder="Minimo 6 caratteri"
+              class="w-full pl-10 pr-4 py-2.5 bg-surface-950 border border-slate-700/80 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all" />
           </div>
         </div>
 
-        <button 
-          type="submit" 
-          id="btn-auth-submit" 
-          class="w-full py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold text-sm rounded-xl shadow-lg shadow-blue-600/30 transition-all flex items-center justify-center gap-2 mt-2"
-        >
+        <button type="submit" id="btn-auth-submit"
+          class="w-full py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold text-sm rounded-xl shadow-lg shadow-blue-600/30 transition-all flex items-center justify-center gap-2 mt-2">
           <span id="auth-btn-text">Accedi alla Matrice</span>
           <i data-lucide="arrow-right" class="w-4 h-4"></i>
         </button>
@@ -247,7 +230,8 @@
 
       <!-- Supabase Reconfigure Link -->
       <div class="mt-6 text-center">
-        <button onclick="openSetupModal()" class="text-xs text-slate-500 hover:text-slate-300 transition-colors inline-flex items-center gap-1.5">
+        <button onclick="openSetupModal()"
+          class="text-xs text-slate-500 hover:text-slate-300 transition-colors inline-flex items-center gap-1.5">
           <i data-lucide="settings" class="w-3.5 h-3.5"></i>
           Modifica credenziali Supabase
         </button>
@@ -259,20 +243,23 @@
   <!-- 3. DASHBOARD PRINCIPALE (QUADRANTI)       -->
   <!-- ========================================== -->
   <div id="app-section" class="flex-1 flex flex-col hidden min-h-screen">
-    
+
     <!-- Navbar Header -->
     <header class="bg-surface-900/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-30 px-4 sm:px-6 py-3.5">
       <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
-        
+
         <!-- Logo e Titolo -->
         <div class="flex items-center gap-3">
-          <div class="p-2 bg-gradient-to-tr from-blue-600 to-indigo-600 text-white rounded-xl shadow-md shadow-blue-500/20">
+          <div
+            class="p-2 bg-gradient-to-tr from-blue-600 to-indigo-600 text-white rounded-xl shadow-md shadow-blue-500/20">
             <i data-lucide="layout-grid" class="w-5 h-5"></i>
           </div>
           <div>
             <h1 class="text-base sm:text-lg font-bold font-display text-white tracking-tight flex items-center gap-2">
               Matrice di Eisenhower
-              <span class="hidden sm:inline-flex text-[10px] uppercase font-semibold tracking-wider px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20">Cloud Synced</span>
+              <span
+                class="hidden sm:inline-flex text-[10px] uppercase font-semibold tracking-wider px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20">Cloud
+                Synced</span>
             </h1>
             <p class="text-[11px] text-slate-400 hidden sm:block">Organizza le tue attività per Urgenza e Importanza</p>
           </div>
@@ -280,10 +267,8 @@
 
         <!-- Actions Destra -->
         <div class="flex items-center gap-2.5">
-          <button 
-            onclick="openTaskModal()" 
-            class="px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-semibold rounded-xl shadow-lg shadow-blue-600/30 transition-all flex items-center gap-1.5 active:scale-95"
-          >
+          <button onclick="openTaskModal()"
+            class="px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-semibold rounded-xl shadow-lg shadow-blue-600/30 transition-all flex items-center gap-1.5 active:scale-95">
             <i data-lucide="plus" class="w-4 h-4"></i>
             <span class="hidden sm:inline">Nuova Attività</span>
             <span class="sm:hidden">Nuovo</span>
@@ -291,27 +276,31 @@
 
           <!-- Dropdown Profilo / Settings -->
           <div class="relative group">
-            <button 
-              id="user-menu-btn" 
-              class="flex items-center gap-2 p-1.5 sm:px-3 sm:py-1.5 bg-surface-800 hover:bg-slate-700/80 border border-slate-700 rounded-xl text-xs text-slate-200 transition-all"
-            >
-              <div class="w-6 h-6 rounded-full bg-indigo-600/30 border border-indigo-400/40 flex items-center justify-center text-indigo-300 font-bold text-[10px]" id="user-avatar">
+            <button id="user-menu-btn"
+              class="flex items-center gap-2 p-1.5 sm:px-3 sm:py-1.5 bg-surface-800 hover:bg-slate-700/80 border border-slate-700 rounded-xl text-xs text-slate-200 transition-all">
+              <div
+                class="w-6 h-6 rounded-full bg-indigo-600/30 border border-indigo-400/40 flex items-center justify-center text-indigo-300 font-bold text-[10px]"
+                id="user-avatar">
                 U
               </div>
-              <span id="user-email-display" class="hidden md:inline max-w-[150px] truncate text-slate-300">utente@email.com</span>
+              <span id="user-email-display"
+                class="hidden md:inline max-w-[150px] truncate text-slate-300">utente@email.com</span>
               <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-slate-400 hidden sm:block"></i>
             </button>
 
             <!-- Menu a tendina -->
-            <div class="absolute right-0 mt-1.5 w-48 bg-surface-900 border border-slate-700 rounded-xl shadow-xl py-1.5 hidden group-hover:block hover:block z-40">
+            <div
+              class="absolute right-0 mt-1.5 w-48 bg-surface-900 border border-slate-700 rounded-xl shadow-xl py-1.5 hidden group-hover:block hover:block z-40">
               <div class="px-3 py-1.5 border-b border-slate-800 text-[11px] text-slate-400 md:hidden">
                 <span id="user-email-mobile" class="block truncate font-medium text-slate-200"></span>
               </div>
-              <button onclick="openSetupModal()" class="w-full text-left px-3 py-2 text-xs text-slate-300 hover:bg-slate-800 flex items-center gap-2 transition-colors">
+              <button onclick="openSetupModal()"
+                class="w-full text-left px-3 py-2 text-xs text-slate-300 hover:bg-slate-800 flex items-center gap-2 transition-colors">
                 <i data-lucide="settings" class="w-3.5 h-3.5 text-slate-400"></i>
                 Impostazioni Supabase
               </button>
-              <button onclick="logout()" class="w-full text-left px-3 py-2 text-xs text-red-400 hover:bg-red-500/10 flex items-center gap-2 transition-colors">
+              <button onclick="logout()"
+                class="w-full text-left px-3 py-2 text-xs text-red-400 hover:bg-red-500/10 flex items-center gap-2 transition-colors">
                 <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
                 Disconnetti
               </button>
@@ -325,11 +314,20 @@
     <!-- Mobile View Filter Tabs (Tutti o Singolo Quadrante su smartphone) -->
     <div class="lg:hidden bg-surface-900 border-b border-slate-800 px-4 py-2 sticky top-[57px] z-20 overflow-x-auto">
       <div class="flex gap-1.5 text-xs min-w-max">
-        <button onclick="setMobileFilter('all')" id="tab-mob-all" class="px-3 py-1.5 rounded-lg bg-blue-600 text-white font-medium">Tutti</button>
-        <button onclick="setMobileFilter('q1')" id="tab-mob-q1" class="px-3 py-1.5 rounded-lg bg-surface-800 text-slate-300 hover:text-white border border-red-500/30">Q1: Crisi</button>
-        <button onclick="setMobileFilter('q2')" id="tab-mob-q2" class="px-3 py-1.5 rounded-lg bg-surface-800 text-slate-300 hover:text-white border border-blue-500/30">Q2: Qualità</button>
-        <button onclick="setMobileFilter('q3')" id="tab-mob-q3" class="px-3 py-1.5 rounded-lg bg-surface-800 text-slate-300 hover:text-white border border-amber-500/30">Q3: Inganno</button>
-        <button onclick="setMobileFilter('q4')" id="tab-mob-q4" class="px-3 py-1.5 rounded-lg bg-surface-800 text-slate-300 hover:text-white border border-slate-500/30">Q4: Spreco</button>
+        <button onclick="setMobileFilter('all')" id="tab-mob-all"
+          class="px-3 py-1.5 rounded-lg bg-blue-600 text-white font-medium">Tutti</button>
+        <button onclick="setMobileFilter('q1')" id="tab-mob-q1"
+          class="px-3 py-1.5 rounded-lg bg-surface-800 text-slate-300 hover:text-white border border-red-500/30">Q1:
+          Crisi</button>
+        <button onclick="setMobileFilter('q2')" id="tab-mob-q2"
+          class="px-3 py-1.5 rounded-lg bg-surface-800 text-slate-300 hover:text-white border border-blue-500/30">Q2:
+          Qualità</button>
+        <button onclick="setMobileFilter('q3')" id="tab-mob-q3"
+          class="px-3 py-1.5 rounded-lg bg-surface-800 text-slate-300 hover:text-white border border-amber-500/30">Q3:
+          Inganno</button>
+        <button onclick="setMobileFilter('q4')" id="tab-mob-q4"
+          class="px-3 py-1.5 rounded-lg bg-surface-800 text-slate-300 hover:text-white border border-slate-500/30">Q4:
+          Spreco</button>
       </div>
     </div>
 
@@ -337,12 +335,15 @@
     <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 flex flex-col">
 
       <!-- Coordinate / Assi concettuali Desktop -->
-      <div class="hidden lg:grid grid-cols-2 gap-6 mb-2 text-center text-xs font-bold uppercase tracking-wider text-slate-400">
-        <div class="flex items-center justify-center gap-2 py-1 bg-surface-900/50 rounded-lg border border-slate-800/60">
+      <div
+        class="hidden lg:grid grid-cols-2 gap-6 mb-2 text-center text-xs font-bold uppercase tracking-wider text-slate-400">
+        <div
+          class="flex items-center justify-center gap-2 py-1 bg-surface-900/50 rounded-lg border border-slate-800/60">
           <i data-lucide="flame" class="w-3.5 h-3.5 text-red-400"></i>
           Urgente
         </div>
-        <div class="flex items-center justify-center gap-2 py-1 bg-surface-900/50 rounded-lg border border-slate-800/60">
+        <div
+          class="flex items-center justify-center gap-2 py-1 bg-surface-900/50 rounded-lg border border-slate-800/60">
           <i data-lucide="clock" class="w-3.5 h-3.5 text-blue-400"></i>
           Non Urgente
         </div>
@@ -350,139 +351,134 @@
 
       <!-- 2x2 Matrix Container -->
       <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-        
+
         <!-- ================= Q1: CRISI ================= -->
-        <div 
-          id="quadrant-q1" 
-          class="quadrant-container flex flex-col rounded-2xl bg-surface-900/80 border-2 border-red-500/40 p-4 transition-all shadow-lg hover:shadow-red-500/5"
-        >
+        <div id="quadrant-q1"
+          class="quadrant-container flex flex-col rounded-2xl bg-surface-900/80 border-2 border-red-500/40 p-4 sm:p-5 transition-all shadow-lg hover:shadow-red-500/5">
           <!-- Quadrant Header -->
-          <div class="flex items-start justify-between pb-3 border-b border-red-500/20 mb-3">
-            <div class="flex items-center gap-2.5">
-              <span class="w-7 h-7 rounded-lg bg-red-500/20 text-red-400 border border-red-500/40 flex items-center justify-center font-bold font-display text-xs">
+          <div class="flex items-start justify-between pb-3.5 border-b border-red-500/20 mb-3.5">
+            <div class="flex items-center gap-3">
+              <span
+                class="w-9 h-9 rounded-xl bg-red-500/20 text-red-400 border border-red-500/40 flex items-center justify-center font-extrabold font-display text-sm shrink-0">
                 Q1
               </span>
               <div>
-                <h3 class="text-sm font-bold text-white font-display flex items-center gap-2">
+                <h3 class="text-base sm:text-lg font-bold text-white font-display flex flex-wrap items-center gap-2">
                   Crisi (Fare Subito)
-                  <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-red-500/20 text-red-300">Urgente & Importante</span>
+                  <span
+                    class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-red-500/20 text-red-300 border border-red-500/30">Urgente
+                    & Importante</span>
                 </h3>
-                <p class="text-[11px] text-slate-400">Scadenze imminenti, emergenze, problemi critici</p>
+                <p class="text-xs sm:text-sm text-slate-400 mt-0.5">Scadenze imminenti, emergenze, problemi critici</p>
               </div>
             </div>
-            <span id="badge-count-q1" class="text-xs font-bold px-2 py-0.5 rounded-full bg-red-950 text-red-300 border border-red-800">0</span>
+            <span id="badge-count-q1"
+              class="text-sm font-bold px-2.5 py-1 rounded-full bg-red-950 text-red-300 border border-red-800 shrink-0">0</span>
           </div>
 
           <!-- Task Dropzone / List -->
-          <div 
-            id="list-q1" 
+          <div id="list-q1"
             class="quadrant-dropzone flex-1 min-h-[220px] rounded-xl flex flex-col gap-2.5 p-1 transition-all"
-            ondragover="handleDragOver(event)" 
-            ondragleave="handleDragLeave(event)" 
-            ondrop="handleDrop(event, 'q1')"
-          >
+            ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'q1')">
             <!-- Inserito dinamicamente -->
           </div>
         </div>
 
         <!-- ================= Q2: QUALITÀ ================= -->
-        <div 
-          id="quadrant-q2" 
-          class="quadrant-container flex flex-col rounded-2xl bg-surface-900/80 border-2 border-blue-500/40 p-4 transition-all shadow-lg hover:shadow-blue-500/5"
-        >
+        <div id="quadrant-q2"
+          class="quadrant-container flex flex-col rounded-2xl bg-surface-900/80 border-2 border-blue-500/40 p-4 sm:p-5 transition-all shadow-lg hover:shadow-blue-500/5">
           <!-- Quadrant Header -->
-          <div class="flex items-start justify-between pb-3 border-b border-blue-500/20 mb-3">
-            <div class="flex items-center gap-2.5">
-              <span class="w-7 h-7 rounded-lg bg-blue-500/20 text-blue-400 border border-blue-500/40 flex items-center justify-center font-bold font-display text-xs">
+          <div class="flex items-start justify-between pb-3.5 border-b border-blue-500/20 mb-3.5">
+            <div class="flex items-center gap-3">
+              <span
+                class="w-9 h-9 rounded-xl bg-blue-500/20 text-blue-400 border border-blue-500/40 flex items-center justify-center font-extrabold font-display text-sm shrink-0">
                 Q2
               </span>
               <div>
-                <h3 class="text-sm font-bold text-white font-display flex items-center gap-2">
+                <h3 class="text-base sm:text-lg font-bold text-white font-display flex flex-wrap items-center gap-2">
                   Qualità (Pianificare)
-                  <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300">Importante, Non Urgente</span>
+                  <span
+                    class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/30">Importante,
+                    Non Urgente</span>
                 </h3>
-                <p class="text-[11px] text-slate-400">Crescita, strategia, prevenzione, progetti a lungo termine</p>
+                <p class="text-xs sm:text-sm text-slate-400 mt-0.5">Crescita, strategia, prevenzione, progetti a lungo
+                  termine</p>
               </div>
             </div>
-            <span id="badge-count-q2" class="text-xs font-bold px-2 py-0.5 rounded-full bg-blue-950 text-blue-300 border border-blue-800">0</span>
+            <span id="badge-count-q2"
+              class="text-sm font-bold px-2.5 py-1 rounded-full bg-blue-950 text-blue-300 border border-blue-800 shrink-0">0</span>
           </div>
 
           <!-- Task Dropzone / List -->
-          <div 
-            id="list-q2" 
+          <div id="list-q2"
             class="quadrant-dropzone flex-1 min-h-[220px] rounded-xl flex flex-col gap-2.5 p-1 transition-all"
-            ondragover="handleDragOver(event)" 
-            ondragleave="handleDragLeave(event)" 
-            ondrop="handleDrop(event, 'q2')"
-          >
+            ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'q2')">
             <!-- Inserito dinamicamente -->
           </div>
         </div>
 
         <!-- ================= Q3: INGANNO ================= -->
-        <div 
-          id="quadrant-q3" 
-          class="quadrant-container flex flex-col rounded-2xl bg-surface-900/80 border-2 border-amber-500/40 p-4 transition-all shadow-lg hover:shadow-amber-500/5"
-        >
+        <div id="quadrant-q3"
+          class="quadrant-container flex flex-col rounded-2xl bg-surface-900/80 border-2 border-amber-500/40 p-4 sm:p-5 transition-all shadow-lg hover:shadow-amber-500/5">
           <!-- Quadrant Header -->
-          <div class="flex items-start justify-between pb-3 border-b border-amber-500/20 mb-3">
-            <div class="flex items-center gap-2.5">
-              <span class="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center font-bold font-display text-xs">
+          <div class="flex items-start justify-between pb-3.5 border-b border-amber-500/20 mb-3.5">
+            <div class="flex items-center gap-3">
+              <span
+                class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center font-extrabold font-display text-sm shrink-0">
                 Q3
               </span>
               <div>
-                <h3 class="text-sm font-bold text-white font-display flex items-center gap-2">
+                <h3 class="text-base sm:text-lg font-bold text-white font-display flex flex-wrap items-center gap-2">
                   Inganno (Delegare)
-                  <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300">Urgente, Non Importante</span>
+                  <span
+                    class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">Urgente,
+                    Non Importante</span>
                 </h3>
-                <p class="text-[11px] text-slate-400">Interruzioni, riunioni superflue, richieste di terzi</p>
+                <p class="text-xs sm:text-sm text-slate-400 mt-0.5">Interruzioni, riunioni superflue, richieste di terzi
+                </p>
               </div>
             </div>
-            <span id="badge-count-q3" class="text-xs font-bold px-2 py-0.5 rounded-full bg-amber-950 text-amber-300 border border-amber-800">0</span>
+            <span id="badge-count-q3"
+              class="text-sm font-bold px-2.5 py-1 rounded-full bg-amber-950 text-amber-300 border border-amber-800 shrink-0">0</span>
           </div>
 
           <!-- Task Dropzone / List -->
-          <div 
-            id="list-q3" 
+          <div id="list-q3"
             class="quadrant-dropzone flex-1 min-h-[220px] rounded-xl flex flex-col gap-2.5 p-1 transition-all"
-            ondragover="handleDragOver(event)" 
-            ondragleave="handleDragLeave(event)" 
-            ondrop="handleDrop(event, 'q3')"
-          >
+            ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'q3')">
             <!-- Inserito dinamicamente -->
           </div>
         </div>
 
         <!-- ================= Q4: SPRECO ================= -->
-        <div 
-          id="quadrant-q4" 
-          class="quadrant-container flex flex-col rounded-2xl bg-surface-900/80 border-2 border-slate-600/50 p-4 transition-all shadow-lg hover:shadow-slate-500/5"
-        >
+        <div id="quadrant-q4"
+          class="quadrant-container flex flex-col rounded-2xl bg-surface-900/80 border-2 border-slate-600/50 p-4 sm:p-5 transition-all shadow-lg hover:shadow-slate-500/5">
           <!-- Quadrant Header -->
-          <div class="flex items-start justify-between pb-3 border-b border-slate-700 mb-3">
-            <div class="flex items-center gap-2.5">
-              <span class="w-7 h-7 rounded-lg bg-slate-700/50 text-slate-300 border border-slate-600 flex items-center justify-center font-bold font-display text-xs">
+          <div class="flex items-start justify-between pb-3.5 border-b border-slate-700 mb-3.5">
+            <div class="flex items-center gap-3">
+              <span
+                class="w-9 h-9 rounded-xl bg-slate-700/50 text-slate-300 border border-slate-600 flex items-center justify-center font-extrabold font-display text-sm shrink-0">
                 Q4
               </span>
               <div>
-                <h3 class="text-sm font-bold text-white font-display flex items-center gap-2">
+                <h3 class="text-base sm:text-lg font-bold text-white font-display flex flex-wrap items-center gap-2">
                   Spreco (Eliminare)
-                  <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-800 text-slate-300">Né Urgente né Importante</span>
+                  <span
+                    class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">Né
+                    Urgente né Importante</span>
                 </h3>
-                <p class="text-[11px] text-slate-400">Distrazioni, perdite di tempo, abitudini improduttive</p>
+                <p class="text-xs sm:text-sm text-slate-400 mt-0.5">Distrazioni, perdite di tempo, abitudini
+                  improduttive</p>
               </div>
             </div>
-            <span id="badge-count-q4" class="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700">0</span>
+            <span id="badge-count-q4"
+              class="text-sm font-bold px-2.5 py-1 rounded-full bg-slate-800 text-slate-400 border border-slate-700 shrink-0">0</span>
           </div>
 
           <!-- Task Dropzone / List -->
-          <div 
-            id="list-q4" 
+          <div id="list-q4"
             class="quadrant-dropzone flex-1 min-h-[220px] rounded-xl flex flex-col gap-2.5 p-1 transition-all"
-            ondragover="handleDragOver(event)" 
-            ondragleave="handleDragLeave(event)" 
-            ondrop="handleDrop(event, 'q4')"
-          >
+            ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'q4')">
             <!-- Inserito dinamicamente -->
           </div>
         </div>
@@ -492,10 +488,8 @@
 
     <!-- Mobile Floating Action Button (FAB) -->
     <div class="sm:hidden fixed bottom-6 right-6 z-30">
-      <button 
-        onclick="openTaskModal()" 
-        class="w-14 h-14 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-full text-white shadow-xl shadow-blue-600/40 flex items-center justify-center active:scale-90 transition-transform"
-      >
+      <button onclick="openTaskModal()"
+        class="w-14 h-14 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-full text-white shadow-xl shadow-blue-600/40 flex items-center justify-center active:scale-90 transition-transform">
         <i data-lucide="plus" class="w-7 h-7"></i>
       </button>
     </div>
@@ -505,7 +499,8 @@
   <!-- ========================================== -->
   <!-- 4. MODAL CREA / MODIFICA ATTIVITÀ         -->
   <!-- ========================================== -->
-  <div id="task-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 hidden">
+  <div id="task-modal"
+    class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 hidden">
     <div class="bg-surface-900 border border-slate-700/80 rounded-2xl w-full max-w-lg p-6 shadow-2xl relative">
       <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-5">
         <h3 id="task-modal-title" class="text-lg font-bold font-display text-white">Nuova Attività</h3>
@@ -518,31 +513,26 @@
         <input type="hidden" id="task-id" value="">
 
         <div>
-          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Titolo Attività *</label>
-          <input 
-            type="text" 
-            id="task-title" 
-            required 
-            placeholder="Es. Presentazione cliente, revisione report..." 
-            class="w-full px-4 py-2.5 bg-surface-950 border border-slate-700 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
-          />
+          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Titolo Attività
+            *</label>
+          <input type="text" id="task-title" required placeholder="Es. Presentazione cliente, revisione report..."
+            class="w-full px-4 py-2.5 bg-surface-950 border border-slate-700 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all" />
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Descrizione / Note (Opzionale)</label>
-          <textarea 
-            id="task-desc" 
-            rows="3" 
-            placeholder="Dettagli, link o passaggi necessari..." 
-            class="w-full px-4 py-2.5 bg-surface-950 border border-slate-700 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all resize-none"
-          ></textarea>
+          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Descrizione / Note
+            (Opzionale)</label>
+          <textarea id="task-desc" rows="3" placeholder="Dettagli, link o passaggi necessari..."
+            class="w-full px-4 py-2.5 bg-surface-950 border border-slate-700 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all resize-none"></textarea>
         </div>
 
         <!-- Selettore Quadrante -->
         <div>
-          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Assegna Quadrante *</label>
+          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Assegna Quadrante
+            *</label>
           <div class="grid grid-cols-2 gap-2 text-xs">
-            <label class="flex items-center gap-2.5 p-2.5 rounded-xl border border-red-500/40 bg-red-500/10 cursor-pointer hover:bg-red-500/20 transition-all">
+            <label
+              class="flex items-center gap-2.5 p-2.5 rounded-xl border border-red-500/40 bg-red-500/10 cursor-pointer hover:bg-red-500/20 transition-all">
               <input type="radio" name="quadrant-radio" value="q1" checked class="text-red-600 focus:ring-red-500">
               <div>
                 <span class="font-bold text-white block">Q1: Crisi</span>
@@ -550,7 +540,8 @@
               </div>
             </label>
 
-            <label class="flex items-center gap-2.5 p-2.5 rounded-xl border border-blue-500/40 bg-blue-500/10 cursor-pointer hover:bg-blue-500/20 transition-all">
+            <label
+              class="flex items-center gap-2.5 p-2.5 rounded-xl border border-blue-500/40 bg-blue-500/10 cursor-pointer hover:bg-blue-500/20 transition-all">
               <input type="radio" name="quadrant-radio" value="q2" class="text-blue-600 focus:ring-blue-500">
               <div>
                 <span class="font-bold text-white block">Q2: Qualità</span>
@@ -558,7 +549,8 @@
               </div>
             </label>
 
-            <label class="flex items-center gap-2.5 p-2.5 rounded-xl border border-amber-500/40 bg-amber-500/10 cursor-pointer hover:bg-amber-500/20 transition-all">
+            <label
+              class="flex items-center gap-2.5 p-2.5 rounded-xl border border-amber-500/40 bg-amber-500/10 cursor-pointer hover:bg-amber-500/20 transition-all">
               <input type="radio" name="quadrant-radio" value="q3" class="text-amber-600 focus:ring-amber-500">
               <div>
                 <span class="font-bold text-white block">Q3: Inganno</span>
@@ -566,7 +558,8 @@
               </div>
             </label>
 
-            <label class="flex items-center gap-2.5 p-2.5 rounded-xl border border-slate-600 bg-slate-800/40 cursor-pointer hover:bg-slate-800 transition-all">
+            <label
+              class="flex items-center gap-2.5 p-2.5 rounded-xl border border-slate-600 bg-slate-800/40 cursor-pointer hover:bg-slate-800 transition-all">
               <input type="radio" name="quadrant-radio" value="q4" class="text-slate-500 focus:ring-slate-500">
               <div>
                 <span class="font-bold text-white block">Q4: Spreco</span>
@@ -577,26 +570,19 @@
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Scadenza (Opzionale)</label>
-          <input 
-            type="date" 
-            id="task-due-date" 
-            class="w-full px-4 py-2 bg-surface-950 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:border-blue-500 transition-all"
-          />
+          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Scadenza
+            (Opzionale)</label>
+          <input type="date" id="task-due-date"
+            class="w-full px-4 py-2 bg-surface-950 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:border-blue-500 transition-all" />
         </div>
 
         <div class="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
-          <button 
-            type="button" 
-            onclick="closeTaskModal()" 
-            class="px-4 py-2 text-xs font-semibold text-slate-400 hover:text-white transition-colors"
-          >
+          <button type="button" onclick="closeTaskModal()"
+            class="px-4 py-2 text-xs font-semibold text-slate-400 hover:text-white transition-colors">
             Annulla
           </button>
-          <button 
-            type="submit" 
-            class="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs sm:text-sm rounded-xl shadow-lg shadow-blue-600/30 transition-all"
-          >
+          <button type="submit"
+            class="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs sm:text-sm rounded-xl shadow-lg shadow-blue-600/30 transition-all">
             Salva Attività
           </button>
         </div>
@@ -608,6 +594,14 @@
   <!-- 5. JAVASCRIPT APPLICATIVO                  -->
   <!-- ========================================== -->
   <script>
+    // ============================================================
+    // CONFIGURAZIONE PERMANENTE (FACOLTATIVA):
+    // Se vuoi evitare di reinserire i dati quando cancelli la cache del browser,
+    // puoi incollare il tuo Project URL/ID e Anon Key direttamente qui:
+    // ============================================================
+    const HARDCODED_SUPABASE_URL = "rlriysfktiatjmodyidv"; // es. "tuo-project-id" oppure "https://xyz.supabase.co"
+    const HARDCODED_SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJscml5c2ZrdGlhdGptb2R5aWR2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4MzM4NTIsImV4cCI6MjEwNjQwOTg1Mn0.Wu0ur8rl3_V_x7DpmVSCKttSVzerkKm5ggj0Du0tynE"; // es. "eyJhbGciOiJIUzI1NiIsInR5..."
+
     // --- STATO GLOBALE ---
     let supabaseClient = null;
     let currentUser = null;
@@ -622,13 +616,21 @@
     });
 
     function initApp() {
-      const savedUrl = localStorage.getItem('sb_url');
-      const savedKey = localStorage.getItem('sb_key');
+      let savedUrl = localStorage.getItem('sb_url') || HARDCODED_SUPABASE_URL;
+      let savedKey = localStorage.getItem('sb_key') || HARDCODED_SUPABASE_KEY;
 
       if (!savedUrl || !savedKey) {
         // Mostra modal di primo setup
         openSetupModal(true);
       } else {
+        // Normalizza se inserito solo Project ID
+        if (!savedUrl.startsWith('http://') && !savedUrl.startsWith('https://')) {
+          if (!savedUrl.includes('.supabase.co')) {
+            savedUrl = `https://${savedUrl}.supabase.co`;
+          } else {
+            savedUrl = `https://${savedUrl}`;
+          }
+        }
         initSupabase(savedUrl, savedKey);
       }
     }
@@ -647,9 +649,9 @@
     function openSetupModal(isFirstTime = false) {
       const modal = document.getElementById('setup-modal');
       const btnClose = document.getElementById('btn-close-setup');
-      
-      document.getElementById('cfg-url').value = localStorage.getItem('sb_url') || '';
-      document.getElementById('cfg-key').value = localStorage.getItem('sb_key') || '';
+
+      document.getElementById('cfg-url').value = localStorage.getItem('sb_url') || HARDCODED_SUPABASE_URL || '';
+      document.getElementById('cfg-key').value = localStorage.getItem('sb_key') || HARDCODED_SUPABASE_KEY || '';
 
       if (isFirstTime) {
         btnClose.classList.add('hidden');
@@ -698,7 +700,7 @@
       if (!supabaseClient) return;
 
       const { data: { session }, error } = await supabaseClient.auth.getSession();
-      
+
       if (session && session.user) {
         onUserAuthenticated(session.user);
       } else {
@@ -768,7 +770,7 @@
             password
           });
           if (error) throw error;
-          
+
           if (data.user && !data.session) {
             showToast('Registrazione completata! Controlla la tua email per confermare l\'account.', 'info');
           } else {
@@ -968,7 +970,7 @@
     async function handleDrop(e, targetQuadrant) {
       e.preventDefault();
       e.currentTarget.classList.remove('drag-over');
-      
+
       const taskId = e.dataTransfer.getData('text/plain') || draggedTaskId;
       if (!taskId) return;
 
@@ -1150,7 +1152,7 @@
     function showToast(message, type = 'info') {
       const container = document.getElementById('toast-container');
       const toast = document.createElement('div');
-      
+
       let borderCol = 'border-slate-700 bg-surface-900';
       let icon = 'info';
       let textCol = 'text-blue-400';
@@ -1188,4 +1190,5 @@
     }
   </script>
 </body>
+
 </html>
