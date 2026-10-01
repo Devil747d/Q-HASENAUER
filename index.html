@@ -275,9 +275,9 @@
 
         <!-- Actions Destra -->
         <div class="flex items-center gap-2 sm:gap-2.5">
-          <!-- Pulsante Installa PWA -->
+          <!-- Pulsante Installa PWA (nascosto di default, visibile solo se non ancora installata) -->
           <button id="btn-install-pwa" onclick="promptInstallPwa()"
-            class="px-2.5 sm:px-3 py-2 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 text-xs sm:text-sm font-semibold rounded-xl transition-all flex items-center gap-1.5 active:scale-95"
+            class="hidden px-2.5 sm:px-3 py-2 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 text-xs sm:text-sm font-semibold rounded-xl transition-all flex items-center gap-1.5 active:scale-95"
             title="Installa come App su smartphone o computer">
             <i data-lucide="download" class="w-4 h-4"></i>
             <span class="hidden sm:inline">Installa App</span>
@@ -1245,8 +1245,18 @@
     // --- PWA SERVICE WORKER & INSTALL PROMPT ---
     let deferredInstallPrompt = null;
 
+    // Se l'app è già installata e aperta a schermo intero (standalone), nascondi il pulsante Installa
+    function checkStandaloneMode() {
+      const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+      const btn = document.getElementById('btn-install-pwa');
+      if (btn && isStandalone) {
+        btn.classList.add('hidden');
+      }
+    }
+
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
+        checkStandaloneMode();
         navigator.serviceWorker.register('./sw.js')
           .then(reg => console.log('PWA Service Worker registrato con successo:', reg.scope))
           .catch(err => console.log('Service Worker errore (normale se aperto da file:// locale):', err));
@@ -1254,12 +1264,24 @@
     }
 
     window.addEventListener('beforeinstallprompt', (e) => {
+      // Se già in standalone, ignora
+      if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
+        return;
+      }
       e.preventDefault();
       deferredInstallPrompt = e;
       const btn = document.getElementById('btn-install-pwa');
       if (btn) {
+        btn.classList.remove('hidden');
         btn.classList.add('ring-2', 'ring-emerald-400/50');
       }
+    });
+
+    window.addEventListener('appinstalled', () => {
+      const btn = document.getElementById('btn-install-pwa');
+      if (btn) btn.classList.add('hidden');
+      deferredInstallPrompt = null;
+      console.log('App installata!');
     });
 
     function promptInstallPwa() {
