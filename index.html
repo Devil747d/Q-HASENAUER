@@ -274,7 +274,7 @@
         </div>
 
         <!-- Actions Destra -->
-        <div class="flex items-center gap-2 sm:gap-2.5">
+        <div class="flex items-center gap-1.5 sm:gap-2.5">
           <!-- Pulsante Installa PWA (nascosto di default, visibile solo se non ancora installata) -->
           <button id="btn-install-pwa" onclick="promptInstallPwa()"
             class="hidden px-2.5 sm:px-3 py-2 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 border border-emerald-500/30 text-xs sm:text-sm font-semibold rounded-xl transition-all flex items-center gap-1.5 active:scale-95"
@@ -284,11 +284,32 @@
             <span class="sm:hidden text-[11px]">Installa</span>
           </button>
 
+          <!-- Pulsante Navigazione Matrice (visibile se ci si trova nelle Statistiche) -->
+          <button id="btn-nav-matrix" onclick="switchView('matrix')"
+            class="hidden px-2.5 sm:px-3 py-2 bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 border border-blue-500/30 text-xs sm:text-sm font-semibold rounded-xl transition-all flex items-center gap-1.5 active:scale-95"
+            title="Torna alla Matrice 4 Quadranti">
+            <i data-lucide="layout-grid" class="w-4 h-4"></i>
+            <span class="hidden sm:inline">Matrice</span>
+            <span class="sm:hidden text-[11px]">Matrice</span>
+          </button>
+
+          <!-- Pulsante Statistiche a fianco al bottone Nuova Attività -->
+          <button id="btn-nav-stats" onclick="switchView('stats')"
+            class="px-2.5 sm:px-3 py-2 bg-surface-800 hover:bg-slate-700/80 text-slate-200 hover:text-white border border-slate-700 text-xs sm:text-sm font-semibold rounded-xl transition-all flex items-center gap-1.5 active:scale-95"
+            title="Visualizza statistiche e attività completate per quadrante">
+            <i data-lucide="bar-chart-2" class="w-4 h-4 text-indigo-400"></i>
+            <span class="hidden sm:inline">Statistiche</span>
+            <span class="sm:hidden text-[11px]">Stats</span>
+            <span id="nav-stats-badge"
+              class="ml-0.5 text-[10px] px-1.5 py-0.5 bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 rounded-full font-bold">0</span>
+          </button>
+
+          <!-- Pulsante Nuova Attività -->
           <button onclick="openTaskModal()"
-            class="px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-semibold rounded-xl shadow-lg shadow-blue-600/30 transition-all flex items-center gap-1.5 active:scale-95">
+            class="px-3 sm:px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-semibold rounded-xl shadow-lg shadow-blue-600/30 transition-all flex items-center gap-1.5 active:scale-95">
             <i data-lucide="plus" class="w-4 h-4"></i>
             <span class="hidden sm:inline">Nuova Attività</span>
-            <span class="sm:hidden">Nuovo</span>
+            <span class="sm:hidden text-[11px]">Nuovo</span>
           </button>
 
           <!-- Dropdown Profilo / Settings -->
@@ -328,8 +349,13 @@
       </div>
     </header>
 
-    <!-- Mobile View Filter Tabs (Tutti o Singolo Quadrante su smartphone) -->
-    <div class="lg:hidden bg-surface-900 border-b border-slate-800 px-4 py-2 sticky top-[57px] z-20 overflow-x-auto">
+    <!-- ========================================== -->
+    <!-- 3A. SEZIONE MATRICE PRINCIPALE             -->
+    <!-- ========================================== -->
+    <div id="view-matrix" class="flex-1 flex flex-col">
+
+      <!-- Mobile View Filter Tabs (Tutti o Singolo Quadrante su smartphone) -->
+      <div class="lg:hidden bg-surface-900 border-b border-slate-800 px-4 py-2 sticky top-[57px] z-20 overflow-x-auto">
       <div class="flex gap-1.5 text-xs min-w-max">
         <button onclick="setMobileFilter('all')" id="tab-mob-all"
           class="px-3 py-1.5 rounded-lg bg-blue-600 text-white font-medium">Tutti</button>
@@ -583,6 +609,284 @@
 
       </div>
     </main>
+    </div> <!-- FINE #view-matrix -->
+
+    <!-- ======================================================== -->
+    <!-- 3B. SEZIONE STATISTICHE (ATTIVITÀ COMPLETATE PER QUADRANTE) -->
+    <!-- ======================================================== -->
+    <div id="view-stats" class="hidden flex-1 flex flex-col">
+
+      <!-- Header Sotto-Barra Statistiche -->
+      <div class="border-b border-slate-800 bg-surface-900/60 backdrop-blur-sm px-4 sm:px-6 py-4 sticky top-[57px] z-20">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <button onclick="switchView('matrix')"
+              class="p-2 sm:px-3 sm:py-2 bg-surface-800 hover:bg-slate-700/80 border border-slate-700 rounded-xl text-slate-300 hover:text-white transition-all flex items-center gap-1.5 active:scale-95"
+              title="Torna alla Matrice 4 Quadranti">
+              <i data-lucide="arrow-left" class="w-4 h-4"></i>
+              <span class="text-xs font-semibold hidden sm:inline">Matrice</span>
+            </button>
+            <div>
+              <div class="flex items-center gap-2">
+                <h2 class="text-base sm:text-xl font-bold font-display text-white tracking-tight flex items-center gap-2">
+                  <i data-lucide="bar-chart-2" class="w-5 h-5 text-indigo-400"></i>
+                  Statistiche & Attività Completate
+                </h2>
+                <span id="stats-total-badge"
+                  class="px-2 py-0.5 rounded-full text-[11px] sm:text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                  0 completate
+                </span>
+              </div>
+              <p class="text-[11px] sm:text-xs text-slate-400">Archivio delle attività svolte divise per quadrante di Eisenhower</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+            <button onclick="switchView('matrix')"
+              class="w-full sm:w-auto justify-center px-3.5 py-2 bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 border border-blue-500/30 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all active:scale-95">
+              <i data-lucide="layout-grid" class="w-4 h-4"></i>
+              <span>Torna alla Matrice</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content Statistiche -->
+      <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 flex flex-col">
+
+        <!-- 4 KPI SUMMARY CARDS (2 col su mobile, 4 col su desktop) -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
+          
+          <!-- Card 1: Completate Totali -->
+          <div class="bg-surface-900/80 border border-slate-800 rounded-2xl p-3.5 sm:p-5 shadow-lg relative overflow-hidden">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-[11px] sm:text-xs font-semibold text-slate-400">Completate</span>
+              <div class="p-1.5 sm:p-2 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                <i data-lucide="check-circle-2" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
+              </div>
+            </div>
+            <div class="text-2xl sm:text-3xl font-extrabold font-display text-white" id="stat-completed-count">0</div>
+            <p class="text-[10px] sm:text-[11px] text-slate-400 mt-1">attività portate a termine</p>
+          </div>
+
+          <!-- Card 2: Tasso di Completamento -->
+          <div class="bg-surface-900/80 border border-slate-800 rounded-2xl p-3.5 sm:p-5 shadow-lg relative overflow-hidden">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-[11px] sm:text-xs font-semibold text-slate-400">Completamento</span>
+              <div class="p-1.5 sm:p-2 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                <i data-lucide="percent" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
+              </div>
+            </div>
+            <div class="text-2xl sm:text-3xl font-extrabold font-display text-white" id="stat-completion-rate">0%</div>
+            <p class="text-[10px] sm:text-[11px] text-slate-400 mt-1" id="stat-rate-detail">su 0 attività totali</p>
+          </div>
+
+          <!-- Card 3: Focus Q2 Strategico -->
+          <div class="bg-surface-900/80 border border-slate-800 rounded-2xl p-3.5 sm:p-5 shadow-lg relative overflow-hidden">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-[11px] sm:text-xs font-semibold text-slate-400">Focus Q2 (Qualità)</span>
+              <div class="p-1.5 sm:p-2 rounded-xl bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                <i data-lucide="target" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
+              </div>
+            </div>
+            <div class="text-2xl sm:text-3xl font-extrabold font-display text-white" id="stat-q2-percent">0%</div>
+            <p class="text-[10px] sm:text-[11px] text-slate-400 mt-1" id="stat-q2-count">0 su completate</p>
+          </div>
+
+          <!-- Card 4: Attività Attive rimaste in Matrice -->
+          <div class="bg-surface-900/80 border border-slate-800 rounded-2xl p-3.5 sm:p-5 shadow-lg relative overflow-hidden">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-[11px] sm:text-xs font-semibold text-slate-400">Attive in Matrice</span>
+              <div class="p-1.5 sm:p-2 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                <i data-lucide="clock" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
+              </div>
+            </div>
+            <div class="text-2xl sm:text-3xl font-extrabold font-display text-white" id="stat-active-count">0</div>
+            <p class="text-[10px] sm:text-[11px] text-slate-400 mt-1">compiti ancora da fare</p>
+          </div>
+
+        </div>
+
+        <!-- PROGRESS BAR DISTRIBUZIONE & METRICHE -->
+        <div class="bg-surface-900/80 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-lg mb-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+            <div>
+              <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                <i data-lucide="pie-chart" class="w-4 h-4 text-blue-400"></i>
+                Ripartizione Attività Completate tra i Quadranti
+              </h3>
+              <p class="text-xs text-slate-400">Percentuale di attività svolte nei 4 quadranti della matrice</p>
+            </div>
+            <div id="stat-insights-badge"
+              class="text-[11px] text-slate-300 font-medium px-2.5 py-1 bg-surface-950 rounded-lg border border-slate-800 self-start sm:self-auto">
+              Analisi produttività attiva
+            </div>
+          </div>
+
+          <!-- Barra segmentata -->
+          <div class="w-full h-3 bg-surface-950 rounded-full overflow-hidden flex border border-slate-800 mb-3">
+            <div id="pbar-q1" class="h-full bg-red-500 transition-all duration-500" style="width: 0%" title="Q1 Crisi"></div>
+            <div id="pbar-q2" class="h-full bg-blue-500 transition-all duration-500" style="width: 0%" title="Q2 Qualità"></div>
+            <div id="pbar-q3" class="h-full bg-amber-500 transition-all duration-500" style="width: 0%" title="Q3 Inganno"></div>
+            <div id="pbar-q4" class="h-full bg-slate-500 transition-all duration-500" style="width: 0%" title="Q4 Spreco"></div>
+          </div>
+
+          <!-- Legenda Percentuali -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+            <div class="flex items-center gap-1.5 text-slate-300">
+              <span class="w-2.5 h-2.5 rounded-full bg-red-500 shrink-0"></span>
+              <span class="text-slate-400">Q1 Crisi:</span>
+              <strong id="legend-q1-count" class="text-white">0</strong>
+              <span id="legend-q1-pct" class="text-[10px] text-slate-500">(0%)</span>
+            </div>
+            <div class="flex items-center gap-1.5 text-slate-300">
+              <span class="w-2.5 h-2.5 rounded-full bg-blue-500 shrink-0"></span>
+              <span class="text-slate-400">Q2 Qualità:</span>
+              <strong id="legend-q2-count" class="text-white">0</strong>
+              <span id="legend-q2-pct" class="text-[10px] text-slate-500">(0%)</span>
+            </div>
+            <div class="flex items-center gap-1.5 text-slate-300">
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-500 shrink-0"></span>
+              <span class="text-slate-400">Q3 Inganno:</span>
+              <strong id="legend-q3-count" class="text-white">0</strong>
+              <span id="legend-q3-pct" class="text-[10px] text-slate-500">(0%)</span>
+            </div>
+            <div class="flex items-center gap-1.5 text-slate-300">
+              <span class="w-2.5 h-2.5 rounded-full bg-slate-500 shrink-0"></span>
+              <span class="text-slate-400">Q4 Spreco:</span>
+              <strong id="legend-q4-count" class="text-white">0</strong>
+              <span id="legend-q4-pct" class="text-[10px] text-slate-500">(0%)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- FILTRI MOBILE PER QUADRANTI COMPLETATI SU SMARTPHONE -->
+        <div class="lg:hidden bg-surface-900 border border-slate-800 rounded-xl px-3 py-2 mb-4 overflow-x-auto">
+          <div class="flex gap-1.5 text-xs min-w-max">
+            <button onclick="setStatsMobileFilter('all')" id="tab-stat-mob-all"
+              class="px-3 py-1.5 rounded-lg bg-blue-600 text-white font-medium">Tutti (<span id="tab-stat-badge-all">0</span>)</button>
+            <button onclick="setStatsMobileFilter('q1')" id="tab-stat-mob-q1"
+              class="px-3 py-1.5 rounded-lg bg-surface-800 text-slate-300 hover:text-white border border-red-500/30">Q1 Crisi (<span id="tab-stat-badge-q1">0</span>)</button>
+            <button onclick="setStatsMobileFilter('q2')" id="tab-stat-mob-q2"
+              class="px-3 py-1.5 rounded-lg bg-surface-800 text-slate-300 hover:text-white border border-blue-500/30">Q2 Qualità (<span id="tab-stat-badge-q2">0</span>)</button>
+            <button onclick="setStatsMobileFilter('q3')" id="tab-stat-mob-q3"
+              class="px-3 py-1.5 rounded-lg bg-surface-800 text-slate-300 hover:text-white border border-amber-500/30">Q3 Inganno (<span id="tab-stat-badge-q3">0</span>)</button>
+            <button onclick="setStatsMobileFilter('q4')" id="tab-stat-mob-q4"
+              class="px-3 py-1.5 rounded-lg bg-surface-800 text-slate-300 hover:text-white border border-slate-500/30">Q4 Spreco (<span id="tab-stat-badge-q4">0</span>)</button>
+          </div>
+        </div>
+
+        <!-- 2x2 GRID ATTIVITÀ COMPLETATE DIVISE PER QUADRANTE (Responsive: 1 col smartphone, 2 col desktop) -->
+        <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+
+          <!-- ================= Q1 COMPLETATE: CRISI ================= -->
+          <div id="stats-quadrant-q1"
+            class="flex flex-col rounded-2xl bg-surface-900/80 border-2 border-red-500/30 p-4 sm:p-5 shadow-lg">
+            <div class="flex items-center justify-between pb-3.5 border-b border-red-500/20 mb-3.5">
+              <div class="flex items-center gap-2.5">
+                <span
+                  class="w-8 h-8 rounded-xl bg-red-500/20 text-red-400 border border-red-500/40 flex items-center justify-center font-extrabold font-display text-xs shrink-0">
+                  Q1
+                </span>
+                <div>
+                  <h3 class="text-sm sm:text-base font-bold text-white font-display">
+                    Crisi Risolte (Urgente & Importante)
+                  </h3>
+                  <p class="text-[11px] text-slate-400">Emergenze e scadenze critiche portate a termine</p>
+                </div>
+              </div>
+              <span id="stats-badge-q1"
+                class="text-xs font-bold px-2.5 py-1 rounded-full bg-red-950 text-red-300 border border-red-800 shrink-0">0</span>
+            </div>
+
+            <!-- Lista Task Completati Q1 -->
+            <div id="stats-list-q1" class="flex-1 min-h-[160px] flex flex-col gap-2.5">
+              <!-- Inserito dinamicamente -->
+            </div>
+          </div>
+
+          <!-- ================= Q2 COMPLETATE: QUALITÀ ================= -->
+          <div id="stats-quadrant-q2"
+            class="flex flex-col rounded-2xl bg-surface-900/80 border-2 border-blue-500/30 p-4 sm:p-5 shadow-lg">
+            <div class="flex items-center justify-between pb-3.5 border-b border-blue-500/20 mb-3.5">
+              <div class="flex items-center gap-2.5">
+                <span
+                  class="w-8 h-8 rounded-xl bg-blue-500/20 text-blue-400 border border-blue-500/40 flex items-center justify-center font-extrabold font-display text-xs shrink-0">
+                  Q2
+                </span>
+                <div>
+                  <h3 class="text-sm sm:text-base font-bold text-white font-display">
+                    Obiettivi Strategici (Importante, Non Urgente)
+                  </h3>
+                  <p class="text-[11px] text-slate-400">Pianificazione, crescita personale e prevenzione</p>
+                </div>
+              </div>
+              <span id="stats-badge-q2"
+                class="text-xs font-bold px-2.5 py-1 rounded-full bg-blue-950 text-blue-300 border border-blue-800 shrink-0">0</span>
+            </div>
+
+            <!-- Lista Task Completati Q2 -->
+            <div id="stats-list-q2" class="flex-1 min-h-[160px] flex flex-col gap-2.5">
+              <!-- Inserito dinamicamente -->
+            </div>
+          </div>
+
+          <!-- ================= Q3 COMPLETATE: INGANNO ================= -->
+          <div id="stats-quadrant-q3"
+            class="flex flex-col rounded-2xl bg-surface-900/80 border-2 border-amber-500/30 p-4 sm:p-5 shadow-lg">
+            <div class="flex items-center justify-between pb-3.5 border-b border-amber-500/20 mb-3.5">
+              <div class="flex items-center gap-2.5">
+                <span
+                  class="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center font-extrabold font-display text-xs shrink-0">
+                  Q3
+                </span>
+                <div>
+                  <h3 class="text-sm sm:text-base font-bold text-white font-display">
+                    Deleghe & Urgenze Minori (Urgente, Non Importante)
+                  </h3>
+                  <p class="text-[11px] text-slate-400">Richieste esterne, interruzioni e task delegabili</p>
+                </div>
+              </div>
+              <span id="stats-badge-q3"
+                class="text-xs font-bold px-2.5 py-1 rounded-full bg-amber-950 text-amber-300 border border-amber-800 shrink-0">0</span>
+            </div>
+
+            <!-- Lista Task Completati Q3 -->
+            <div id="stats-list-q3" class="flex-1 min-h-[160px] flex flex-col gap-2.5">
+              <!-- Inserito dinamicamente -->
+            </div>
+          </div>
+
+          <!-- ================= Q4 COMPLETATE: SPRECO ================= -->
+          <div id="stats-quadrant-q4"
+            class="flex flex-col rounded-2xl bg-surface-900/80 border-2 border-slate-600/40 p-4 sm:p-5 shadow-lg">
+            <div class="flex items-center justify-between pb-3.5 border-b border-slate-700/60 mb-3.5">
+              <div class="flex items-center gap-2.5">
+                <span
+                  class="w-8 h-8 rounded-xl bg-slate-700/50 text-slate-300 border border-slate-600 flex items-center justify-center font-extrabold font-display text-xs shrink-0">
+                  Q4
+                </span>
+                <div>
+                  <h3 class="text-sm sm:text-base font-bold text-white font-display">
+                    Distrazioni Eliminate (Né Urgente né Importante)
+                  </h3>
+                  <p class="text-[11px] text-slate-400">Attività futili smaltite o archiviate</p>
+                </div>
+              </div>
+              <span id="stats-badge-q4"
+                class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-800 text-slate-400 border border-slate-700 shrink-0">0</span>
+            </div>
+
+            <!-- Lista Task Completati Q4 -->
+            <div id="stats-list-q4" class="flex-1 min-h-[160px] flex flex-col gap-2.5">
+              <!-- Inserito dinamicamente -->
+            </div>
+          </div>
+
+        </div>
+
+      </main>
+    </div> <!-- FINE #view-stats -->
 
     <!-- Mobile Floating Action Button (FAB) -->
     <div class="sm:hidden fixed bottom-6 right-6 z-30">
@@ -867,6 +1171,7 @@
       document.getElementById('user-email-mobile').textContent = email;
       document.getElementById('user-avatar').textContent = email.charAt(0).toUpperCase();
 
+      switchView('matrix');
       loadTasks();
       lucide.createIcons();
     }
@@ -949,6 +1254,8 @@
         if (error) throw error;
         currentTasks = data || [];
         renderMatrix();
+        renderStats();
+        updateNavStatsBadge();
       } catch (err) {
         showToast('Impossibile caricare le attività: ' + err.message, 'error');
       }
@@ -960,23 +1267,29 @@
 
       quadrants.forEach(q => {
         const container = document.getElementById(`list-${q}`);
-        container.innerHTML = '';
+        if (container) container.innerHTML = '';
       });
 
-      currentTasks.forEach(task => {
+      // TOGLI DALLA VISUALE LE ATTIVITÀ COMPLETATE:
+      // Mostriamo nella Matrice SOLO le attività attive (non completate)
+      const activeTasks = currentTasks.filter(t => !t.is_completed);
+
+      activeTasks.forEach(task => {
         const q = task.quadrant;
         if (counts[q] !== undefined) {
           counts[q]++;
           const card = createTaskCardElement(task);
-          document.getElementById(`list-${q}`).appendChild(card);
+          const container = document.getElementById(`list-${q}`);
+          if (container) container.appendChild(card);
         }
       });
 
-      // Aggiorna badge contatori
+      // Aggiorna badge contatori per compiti attivi
       quadrants.forEach(q => {
-        document.getElementById(`badge-count-${q}`).textContent = counts[q];
+        const badge = document.getElementById(`badge-count-${q}`);
+        if (badge) badge.textContent = counts[q];
         const container = document.getElementById(`list-${q}`);
-        if (counts[q] === 0) {
+        if (container && counts[q] === 0) {
           container.innerHTML = `
             <div class="flex-1 flex flex-col items-center justify-center py-8 text-slate-500/70 text-center">
               <i data-lucide="inbox" class="w-8 h-8 mb-2 stroke-[1.5]"></i>
@@ -986,6 +1299,7 @@
         }
       });
 
+      updateNavStatsBadge();
       lucide.createIcons();
     }
 
@@ -1142,7 +1456,17 @@
 
       const newStatus = !task.is_completed;
       task.is_completed = newStatus;
+      
+      // Aggiorna istantaneamente sia la Matrice che le Statistiche
       renderMatrix();
+      renderStats();
+      updateNavStatsBadge();
+
+      if (newStatus) {
+        showToast('Attività completata e spostata nelle Statistiche! 🎉', 'success');
+      } else {
+        showToast('Attività ripristinata nella Matrice! 📋', 'info');
+      }
 
       try {
         const { error } = await supabaseClient
@@ -1162,6 +1486,8 @@
 
       currentTasks = currentTasks.filter(t => t.id !== taskId);
       renderMatrix();
+      renderStats();
+      updateNavStatsBadge();
 
       try {
         const { error } = await supabaseClient
@@ -1174,6 +1500,276 @@
       } catch (err) {
         showToast('Errore eliminazione: ' + err.message, 'error');
         loadTasks();
+      }
+    }
+
+    // --- GESTIONE NAVIGAZIONE VISTE (MATRICE / STATISTICHE) ---
+    let currentView = 'matrix'; // 'matrix' | 'stats'
+
+    function switchView(view) {
+      currentView = view;
+      const viewMatrix = document.getElementById('view-matrix');
+      const viewStats = document.getElementById('view-stats');
+      const btnMatrix = document.getElementById('btn-nav-matrix');
+      const btnStats = document.getElementById('btn-nav-stats');
+
+      if (view === 'stats') {
+        if (viewMatrix) viewMatrix.classList.add('hidden');
+        if (viewStats) viewStats.classList.remove('hidden');
+
+        if (btnMatrix) btnMatrix.classList.remove('hidden');
+        if (btnStats) {
+          btnStats.classList.add('bg-indigo-600', 'text-white', 'border-indigo-500', 'shadow-lg', 'shadow-indigo-600/30');
+          btnStats.classList.remove('bg-surface-800', 'text-slate-200');
+        }
+
+        renderStats();
+      } else {
+        if (viewStats) viewStats.classList.add('hidden');
+        if (viewMatrix) viewMatrix.classList.remove('hidden');
+
+        if (btnMatrix) btnMatrix.classList.add('hidden');
+        if (btnStats) {
+          btnStats.classList.remove('bg-indigo-600', 'text-white', 'border-indigo-500', 'shadow-lg', 'shadow-indigo-600/30');
+          btnStats.classList.add('bg-surface-800', 'text-slate-200');
+        }
+
+        renderMatrix();
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      lucide.createIcons();
+    }
+
+    // --- LOGICA RENDERING STATISTICHE & ATTIVITÀ COMPLETATE ---
+    function renderStats() {
+      const completedTasks = currentTasks.filter(t => t.is_completed);
+      const totalTasks = currentTasks.length;
+      const activeCount = currentTasks.filter(t => !t.is_completed).length;
+      const completedCount = completedTasks.length;
+
+      // Aggiorna badge contatore navbar
+      updateNavStatsBadge();
+
+      // KPI Generali
+      const elCompleted = document.getElementById('stat-completed-count');
+      if (elCompleted) elCompleted.textContent = completedCount;
+
+      const rate = totalTasks > 0 ? Math.round((completedCount / totalTasks) * 100) : 0;
+      const elRate = document.getElementById('stat-completion-rate');
+      if (elRate) elRate.textContent = `${rate}%`;
+
+      const elRateDetail = document.getElementById('stat-rate-detail');
+      if (elRateDetail) elRateDetail.textContent = `su ${totalTasks} attività registrate`;
+
+      const elActive = document.getElementById('stat-active-count');
+      if (elActive) elActive.textContent = activeCount;
+
+      // Conteggi completati per ciascun quadrante
+      const qCounts = { q1: 0, q2: 0, q3: 0, q4: 0 };
+      completedTasks.forEach(t => {
+        if (qCounts[t.quadrant] !== undefined) qCounts[t.quadrant]++;
+      });
+
+      // Focus Q2 (Qualità/Strategia)
+      const q2Percent = completedCount > 0 ? Math.round((qCounts.q2 / completedCount) * 100) : 0;
+      const elQ2Pct = document.getElementById('stat-q2-percent');
+      if (elQ2Pct) elQ2Pct.textContent = `${q2Percent}%`;
+
+      const elQ2Count = document.getElementById('stat-q2-count');
+      if (elQ2Count) elQ2Count.textContent = `${qCounts.q2} su ${completedCount} completate`;
+
+      // Barra di avanzamento segmentata
+      const p1 = completedCount > 0 ? Math.round((qCounts.q1 / completedCount) * 100) : 0;
+      const p2 = completedCount > 0 ? Math.round((qCounts.q2 / completedCount) * 100) : 0;
+      const p3 = completedCount > 0 ? Math.round((qCounts.q3 / completedCount) * 100) : 0;
+      const p4 = completedCount > 0 ? Math.round((qCounts.q4 / completedCount) * 100) : 0;
+
+      const pbar1 = document.getElementById('pbar-q1');
+      const pbar2 = document.getElementById('pbar-q2');
+      const pbar3 = document.getElementById('pbar-q3');
+      const pbar4 = document.getElementById('pbar-q4');
+      if (pbar1) pbar1.style.width = `${p1}%`;
+      if (pbar2) pbar2.style.width = `${p2}%`;
+      if (pbar3) pbar3.style.width = `${p3}%`;
+      if (pbar4) pbar4.style.width = `${p4}%`;
+
+      // Legenda Percentuali
+      const legQ1 = document.getElementById('legend-q1-count');
+      if (legQ1) legQ1.textContent = qCounts.q1;
+      const legQ1Pct = document.getElementById('legend-q1-pct');
+      if (legQ1Pct) legQ1Pct.textContent = `(${p1}%)`;
+
+      const legQ2 = document.getElementById('legend-q2-count');
+      if (legQ2) legQ2.textContent = qCounts.q2;
+      const legQ2Pct = document.getElementById('legend-q2-pct');
+      if (legQ2Pct) legQ2Pct.textContent = `(${p2}%)`;
+
+      const legQ3 = document.getElementById('legend-q3-count');
+      if (legQ3) legQ3.textContent = qCounts.q3;
+      const legQ3Pct = document.getElementById('legend-q3-pct');
+      if (legQ3Pct) legQ3Pct.textContent = `(${p3}%)`;
+
+      const legQ4 = document.getElementById('legend-q4-count');
+      if (legQ4) legQ4.textContent = qCounts.q4;
+      const legQ4Pct = document.getElementById('legend-q4-pct');
+      if (legQ4Pct) legQ4Pct.textContent = `(${p4}%)`;
+
+      // Badge totali
+      const totalBadge = document.getElementById('stats-total-badge');
+      if (totalBadge) totalBadge.textContent = `${completedCount} completate`;
+
+      const mobAllBadge = document.getElementById('tab-stat-badge-all');
+      if (mobAllBadge) mobAllBadge.textContent = completedCount;
+
+      // Badge singoli quadranti stats
+      ['q1', 'q2', 'q3', 'q4'].forEach(q => {
+        const badge = document.getElementById(`stats-badge-${q}`);
+        if (badge) badge.textContent = qCounts[q];
+        const mobBadge = document.getElementById(`tab-stat-badge-${q}`);
+        if (mobBadge) mobBadge.textContent = qCounts[q];
+      });
+
+      // Insight motivazionale
+      const insightBadge = document.getElementById('stat-insights-badge');
+      if (insightBadge) {
+        if (completedCount === 0) {
+          insightBadge.textContent = '💡 Spunta le attività nella Matrice per vederle qui';
+        } else if (q2Percent >= 40) {
+          insightBadge.textContent = '🌟 Ottimo focus strategico su Q2!';
+        } else if (qCounts.q1 > qCounts.q2 && qCounts.q1 > qCounts.q3) {
+          insightBadge.textContent = '⚠️ Molte urgenze (Q1): pianifica di più in Q2';
+        } else if (qCounts.q3 > qCounts.q2) {
+          insightBadge.textContent = '🔄 Molte interruzioni (Q3): impara a delegare';
+        } else {
+          insightBadge.textContent = '📈 Distribuzione produttività bilanciata';
+        }
+      }
+
+      // Popola le liste delle attività completate divise per quadrante
+      ['q1', 'q2', 'q3', 'q4'].forEach(q => {
+        const container = document.getElementById(`stats-list-${q}`);
+        if (!container) return;
+        container.innerHTML = '';
+
+        const quadTasks = completedTasks.filter(t => t.quadrant === q);
+        if (quadTasks.length === 0) {
+          container.innerHTML = `
+            <div class="flex-1 flex flex-col items-center justify-center py-7 text-slate-500/70 text-center">
+              <i data-lucide="check-circle" class="w-7 h-7 mb-2 stroke-[1.5] text-slate-600"></i>
+              <p class="text-xs">Nessuna attività completata in questo quadrante</p>
+            </div>
+          `;
+        } else {
+          quadTasks.forEach(task => {
+            const card = createCompletedTaskCardElement(task);
+            container.appendChild(card);
+          });
+        }
+      });
+
+      lucide.createIcons();
+    }
+
+    // Card elemento per attività completate
+    function createCompletedTaskCardElement(task) {
+      const card = document.createElement('div');
+      card.id = `completed-task-${task.id}`;
+      card.className = "bg-surface-850/80 hover:bg-surface-800 border border-slate-700/60 rounded-xl p-3 sm:p-3.5 shadow-sm transition-all flex items-start gap-3 group";
+
+      const formattedDate = task.due_date ? new Date(task.due_date).toLocaleDateString('it-IT', { day: '2-digit', month: 'short' }) : null;
+
+      card.innerHTML = `
+        <!-- Checkbox Spuntata per Riattivare/Ripristinare -->
+        <button 
+          onclick="toggleTaskCompleted('${task.id}')" 
+          class="mt-0.5 w-5 h-5 rounded-lg bg-emerald-600/30 hover:bg-emerald-600/50 border border-emerald-500 text-emerald-400 flex items-center justify-center shrink-0 transition-colors cursor-pointer"
+          title="Clicca per ripristinare nella Matrice principale"
+        >
+          <i data-lucide="check" class="w-3.5 h-3.5 stroke-[3]"></i>
+        </button>
+
+        <!-- Dettaglio Attività -->
+        <div class="flex-1 min-w-0">
+          <h4 class="text-xs sm:text-sm font-medium text-slate-300 line-through leading-snug break-words">
+            ${escapeHtml(task.title)}
+          </h4>
+          
+          ${task.description ? `<p class="text-[11px] text-slate-500 mt-1 line-clamp-2 leading-relaxed">${escapeHtml(task.description)}</p>` : ''}
+
+          <div class="flex flex-wrap items-center justify-between gap-2 mt-2 pt-2 border-t border-slate-800/80 text-[10px]">
+            <div class="flex items-center gap-1.5 text-slate-500">
+              <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-emerald-950/60 text-emerald-400 border border-emerald-800/60 font-medium">
+                <i data-lucide="check-check" class="w-3 h-3"></i> Completata
+              </span>
+              ${formattedDate ? `
+                <span class="inline-flex items-center gap-1 text-slate-400">
+                  <i data-lucide="calendar" class="w-3 h-3 text-slate-500"></i> ${formattedDate}
+                </span>
+              ` : ''}
+            </div>
+
+            <div class="flex items-center gap-1 ml-auto">
+              <!-- Ripristina nella Matrice -->
+              <button 
+                onclick="toggleTaskCompleted('${task.id}')" 
+                class="px-2 py-1 text-slate-400 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-colors flex items-center gap-1 text-[11px] active:scale-95 cursor-pointer"
+                title="Riporta l'attività nella Matrice principale"
+              >
+                <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                <span class="hidden sm:inline">Ripristina</span>
+              </button>
+
+              <!-- Elimina Definitivamente -->
+              <button 
+                onclick="deleteTask('${task.id}')" 
+                class="p-1 text-slate-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors active:scale-95 cursor-pointer"
+                title="Elimina definitivamente"
+              >
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      return card;
+    }
+
+    // --- FILTRI VISTA MOBILE STATISTICHE ---
+    function setStatsMobileFilter(filter) {
+      const quads = ['q1', 'q2', 'q3', 'q4'];
+      const tabs = ['all', 'q1', 'q2', 'q3', 'q4'];
+
+      tabs.forEach(t => {
+        const btn = document.getElementById(`tab-stat-mob-${t}`);
+        if (btn) {
+          if (t === filter) {
+            btn.className = "px-3 py-1.5 rounded-lg bg-blue-600 text-white font-medium";
+          } else {
+            btn.className = "px-3 py-1.5 rounded-lg bg-surface-800 text-slate-300 hover:text-white border border-slate-700";
+          }
+        }
+      });
+
+      quads.forEach(q => {
+        const container = document.getElementById(`stats-quadrant-${q}`);
+        if (container) {
+          if (filter === 'all' || filter === q) {
+            container.classList.remove('hidden');
+          } else {
+            container.classList.add('hidden');
+          }
+        }
+      });
+    }
+
+    // Badge contatore completati nella navbar
+    function updateNavStatsBadge() {
+      const count = currentTasks.filter(t => t.is_completed).length;
+      const badge = document.getElementById('nav-stats-badge');
+      if (badge) {
+        badge.textContent = count;
       }
     }
 
