@@ -1,5 +1,5 @@
 // Service Worker per PWA Matrice di Eisenhower
-const CACHE_NAME = 'eisenhower-cache-v5';
+const CACHE_NAME = 'eisenhower-cache-v6';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
