@@ -1952,8 +1952,21 @@
       window.addEventListener('load', () => {
         checkStandaloneMode();
         navigator.serviceWorker.register('./sw.js')
-          .then(reg => console.log('PWA Service Worker registrato con successo:', reg.scope))
+          .then(reg => {
+            console.log('PWA Service Worker registrato con successo:', reg.scope);
+            // Forza il controllo di aggiornamenti immediati
+            reg.update();
+          })
           .catch(err => console.log('Service Worker errore (normale se aperto da file:// locale):', err));
+
+        // Ricarica automaticamente se il service worker si aggiorna
+        let refreshing = false;
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+          if (!refreshing) {
+            refreshing = true;
+            window.location.reload();
+          }
+        });
       });
     }
 
