@@ -1,8 +1,9 @@
 // Service Worker per PWA Matrice di Eisenhower
-const CACHE_NAME = 'eisenhower-cache-v3';
+const CACHE_NAME = 'eisenhower-cache-v4';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
+  './favicon.ico',
   './manifest.json',
   './icon-192.png',
   './icon-512.png'
