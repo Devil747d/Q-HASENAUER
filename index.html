@@ -803,6 +803,17 @@
             </div>
           </div>
         </div>
+        
+        <!-- SEZIONE OBIETTIVI -->
+        <div id="stats-objectives-container" class="bg-surface-900/80 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-lg mb-6">
+          <h3 class="text-sm font-bold text-white flex items-center gap-2 mb-4">
+            <i data-lucide="target" class="w-4 h-4 text-purple-400"></i>
+            Progresso Obiettivi
+          </h3>
+          <div id="stats-objectives-list" class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+             <!-- Inserito dinamicamente -->
+          </div>
+        </div>
 
         <!-- FILTRI MOBILE PER QUADRANTI COMPLETATI SU SMARTPHONE -->
         <div class="lg:hidden bg-surface-900 border border-slate-800 rounded-xl px-3 py-2 mb-4 overflow-x-auto">
@@ -1013,6 +1024,12 @@
               </div>
             </label>
           </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">Obiettivo (Opzionale)</label>
+          <input type="text" id="task-obiettivo" placeholder="Es. Lanciare nuovo prodotto, Leggere 10 libri..."
+            class="w-full px-4 py-2.5 bg-surface-950 border border-slate-700 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all" />
         </div>
 
         <div>
@@ -1464,12 +1481,18 @@
             <!-- Metadata & Quick Actions -->
             <div class="flex flex-wrap items-center justify-between gap-2 mt-2.5 pt-2 border-t border-slate-800/80">
               
-              <!-- Badge Scadenza Intelligente -->
-              <div class="flex items-center gap-1 text-[10px]">
+              <!-- Badge Scadenza Intelligente & Obiettivo -->
+              <div class="flex items-center gap-1 text-[10px] flex-wrap">
                 ${dueInfo ? `
                   <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded border ${dueInfo.badgeClass}">
                     <i data-lucide="${dueInfo.icon}" class="w-3 h-3 ${dueInfo.iconClass}"></i>
                     <span>${dueInfo.label}</span>
+                  </span>
+                ` : ''}
+                ${task.obiettivo ? `
+                  <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded border bg-purple-950/40 text-purple-300 border-purple-500/30">
+                    <i data-lucide="target" class="w-3 h-3 text-purple-400"></i>
+                    <span>${escapeHtml(task.obiettivo)}</span>
                   </span>
                 ` : ''}
               </div>
@@ -1797,7 +1820,57 @@
             container.appendChild(card);
           });
         }
+        }
       });
+
+      // Calcola statistiche per Obiettivi
+      const objectives = {};
+      currentTasks.forEach(t => {
+        if (t.obiettivo) {
+          const objName = t.obiettivo.toLowerCase().trim();
+          if (!objectives[objName]) {
+            objectives[objName] = { name: t.obiettivo, total: 0, completed: 0 };
+          }
+          objectives[objName].total++;
+          if (t.is_completed) {
+            objectives[objName].completed++;
+          }
+        }
+      });
+
+      const objContainer = document.getElementById('stats-objectives-list');
+      if (objContainer) {
+        objContainer.innerHTML = '';
+        const objKeys = Object.keys(objectives);
+        if (objKeys.length === 0) {
+          objContainer.innerHTML = \`
+            <div class="col-span-full py-4 text-slate-500/70 text-center text-xs">
+              Nessun obiettivo registrato. Aggiungi obiettivi alle tue attività per vederne i progressi qui.
+            </div>
+          \`;
+        } else {
+          objKeys.forEach(k => {
+            const obj = objectives[k];
+            const pct = Math.round((obj.completed / obj.total) * 100);
+            
+            const card = document.createElement('div');
+            card.className = "bg-surface-950 border border-slate-800/80 rounded-xl p-3 flex flex-col gap-2 relative overflow-hidden";
+            card.innerHTML = \`
+              <div class="flex justify-between items-start gap-2">
+                <span class="text-sm font-semibold text-white break-words line-clamp-1">\${escapeHtml(obj.name)}</span>
+                <span class="text-xs font-bold \${pct === 100 ? 'text-emerald-400' : 'text-purple-400'} shrink-0">\${pct}%</span>
+              </div>
+              <div class="w-full h-1.5 bg-surface-800 rounded-full overflow-hidden mt-auto">
+                <div class="h-full \${pct === 100 ? 'bg-emerald-500' : 'bg-purple-500'} transition-all duration-500" style="width: \${pct}%"></div>
+              </div>
+              <div class="text-[10px] text-slate-400">
+                \${obj.completed} su \${obj.total} attività
+              </div>
+            \`;
+            objContainer.appendChild(card);
+          });
+        }
+      }
 
       lucide.createIcons();
     }
@@ -1829,13 +1902,19 @@
           ${task.description ? `<p class="text-[11px] text-slate-500 mt-1 line-clamp-2 leading-relaxed">${escapeHtml(task.description)}</p>` : ''}
 
           <div class="flex flex-wrap items-center justify-between gap-2 mt-2 pt-2 border-t border-slate-800/80 text-[10px]">
-            <div class="flex items-center gap-1.5 text-slate-500">
+            <div class="flex items-center gap-1.5 text-slate-500 flex-wrap">
               <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-emerald-950/60 text-emerald-400 border border-emerald-800/60 font-medium">
                 <i data-lucide="check-check" class="w-3 h-3"></i> Completata
               </span>
               ${formattedDate ? `
                 <span class="inline-flex items-center gap-1 text-slate-400">
                   <i data-lucide="calendar" class="w-3 h-3 text-slate-500"></i> ${formattedDate}
+                </span>
+              ` : ''}
+              ${task.obiettivo ? `
+                <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded border bg-purple-950/40 text-purple-300 border-purple-500/30 text-[10px]">
+                  <i data-lucide="target" class="w-3 h-3 text-purple-400"></i>
+                  <span>${escapeHtml(task.obiettivo)}</span>
                 </span>
               ` : ''}
             </div>
@@ -1910,6 +1989,7 @@
       document.getElementById('task-id').value = '';
       document.getElementById('task-title').value = '';
       document.getElementById('task-desc').value = '';
+      document.getElementById('task-obiettivo').value = '';
       document.getElementById('task-due-date').value = '';
 
       const radio = document.querySelector(`input[name="quadrant-radio"][value="${quadrantDefault}"]`);
@@ -1928,6 +2008,7 @@
       document.getElementById('task-id').value = task.id;
       document.getElementById('task-title').value = task.title;
       document.getElementById('task-desc').value = task.description || '';
+      document.getElementById('task-obiettivo').value = task.obiettivo || '';
       document.getElementById('task-due-date').value = task.due_date ? task.due_date.split('T')[0] : '';
 
       const radio = document.querySelector(`input[name="quadrant-radio"][value="${task.quadrant}"]`);
@@ -1946,6 +2027,7 @@
       const id = document.getElementById('task-id').value;
       const title = document.getElementById('task-title').value.trim();
       const description = document.getElementById('task-desc').value.trim() || null;
+      const obiettivo = document.getElementById('task-obiettivo').value.trim() || null;
       const quadrant = document.querySelector('input[name="quadrant-radio"]:checked').value;
       const dueDateVal = document.getElementById('task-due-date').value;
       const due_date = dueDateVal ? new Date(dueDateVal).toISOString() : null;
@@ -1957,7 +2039,7 @@
           // Modifica esistente
           const { error } = await supabaseClient
             .from('tasks')
-            .update({ title, description, quadrant, due_date })
+            .update({ title, description, obiettivo, quadrant, due_date })
             .eq('id', id);
 
           if (error) throw error;
@@ -1970,6 +2052,7 @@
               user_id: currentUser.id,
               title,
               description,
+              obiettivo,
               quadrant,
               due_date
             }]);
