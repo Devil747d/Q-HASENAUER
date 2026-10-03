@@ -1820,7 +1820,6 @@
             container.appendChild(card);
           });
         }
-        }
       });
 
       // Calcola statistiche per Obiettivi
@@ -1843,11 +1842,11 @@
         objContainer.innerHTML = '';
         const objKeys = Object.keys(objectives);
         if (objKeys.length === 0) {
-          objContainer.innerHTML = \`
+          objContainer.innerHTML = `
             <div class="col-span-full py-4 text-slate-500/70 text-center text-xs">
               Nessun obiettivo registrato. Aggiungi obiettivi alle tue attività per vederne i progressi qui.
             </div>
-          \`;
+          `;
         } else {
           objKeys.forEach(k => {
             const obj = objectives[k];
@@ -1855,18 +1854,18 @@
             
             const card = document.createElement('div');
             card.className = "bg-surface-950 border border-slate-800/80 rounded-xl p-3 flex flex-col gap-2 relative overflow-hidden";
-            card.innerHTML = \`
+            card.innerHTML = `
               <div class="flex justify-between items-start gap-2">
-                <span class="text-sm font-semibold text-white break-words line-clamp-1">\${escapeHtml(obj.name)}</span>
-                <span class="text-xs font-bold \${pct === 100 ? 'text-emerald-400' : 'text-purple-400'} shrink-0">\${pct}%</span>
+                <span class="text-sm font-semibold text-white break-words line-clamp-1">${escapeHtml(obj.name)}</span>
+                <span class="text-xs font-bold ${pct === 100 ? 'text-emerald-400' : 'text-purple-400'} shrink-0">${pct}%</span>
               </div>
               <div class="w-full h-1.5 bg-surface-800 rounded-full overflow-hidden mt-auto">
-                <div class="h-full \${pct === 100 ? 'bg-emerald-500' : 'bg-purple-500'} transition-all duration-500" style="width: \${pct}%"></div>
+                <div class="h-full ${pct === 100 ? 'bg-emerald-500' : 'bg-purple-500'} transition-all duration-500" style="width: ${pct}%"></div>
               </div>
               <div class="text-[10px] text-slate-400">
-                \${obj.completed} su \${obj.total} attività
+                ${obj.completed} su ${obj.total} attività
               </div>
-            \`;
+            `;
             objContainer.appendChild(card);
           });
         }
