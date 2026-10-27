@@ -2266,6 +2266,10 @@
           const isDismissed = localStorage.getItem('dismissed_deadline_' + task.id) === 'true';
           if (isDismissed) return;
 
+          // Controlla se è stato chiuso recentemente (bloccato per 4 ore)
+          const isTempDismissed = isDeadlineTemporarilyDismissed(task.id);
+          if (isTempDismissed) return;
+
           // Se è su smartphone: invia notifica push / di sistema se non ancora inviata in sessione
           if (isMobile) {
             const hasNotifiedMobile = sessionStorage.getItem('notified_mobile_' + task.id) === 'true';
@@ -2355,11 +2359,26 @@
     }
 
     function closeDeadlineAlert(taskId) {
-      sessionStorage.setItem('shown_deadline_' + taskId, 'true');
+      // Blocca la notifica per 4 ore usando localStorage
+      localStorage.setItem('temp_dismissed_deadline_' + taskId, Date.now().toString());
       const card = document.getElementById(`alert-card-${taskId}`);
       if (card) {
         card.classList.add('opacity-0', 'translate-x-full');
         setTimeout(() => card.remove(), 300);
+      }
+    }
+
+    function isDeadlineTemporarilyDismissed(taskId) {
+      const key = 'temp_dismissed_deadline_' + taskId;
+      const saved = localStorage.getItem(key);
+      if (!saved) return false;
+      const timestamp = parseInt(saved, 10);
+      const fourHours = 4 * 60 * 60 * 1000; // 4 ore in millisecondi
+      if (Date.now() - timestamp < fourHours) {
+        return true;
+      } else {
+        localStorage.removeItem(key); // Scaduto, puliamo
+        return false;
       }
     }
 
